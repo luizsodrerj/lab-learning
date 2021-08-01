@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html>
+<body>
+    <style>
+       canvas {
+        border: 1px solid black;
+       } 
+    </style>
+
+    <canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+    
+    retangulo(45,30,35,35);
+
+    function retangulo(x, y, width, height) {
+        var canvas = getCanvasContext('canvas');
+
+        canvas.fillRect(x,y,width,height);
+    }
+
+    function getCanvasContext(canvasId) {
+        var canv = document.getElementById(canvasId);
+        
+        return canv.getContext("2d"); 
+    }
+
+</script>
+
+</body>
+</html>
