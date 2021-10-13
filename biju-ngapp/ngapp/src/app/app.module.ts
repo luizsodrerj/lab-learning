@@ -7,10 +7,12 @@ import { NgxMaskModule } from 'ngx-mask';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { IndexContentComponent } from '../index/index.content.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    IndexContentComponent
   ],
   imports: [
     BrowserModule,
@@ -22,4 +24,7 @@ import { AppComponent } from './app.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+}
+
+

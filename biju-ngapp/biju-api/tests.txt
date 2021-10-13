@@ -1,0 +1,3 @@
+
+http://localhost:8080/bijus-api/api/admin-msg/get-all
+
