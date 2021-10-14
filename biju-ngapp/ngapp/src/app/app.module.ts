@@ -8,11 +8,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { IndexContentComponent } from '../index/index.content.component';
+import { UpComponent } from '../index/up.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    IndexContentComponent
+    IndexContentComponent,
+    UpComponent
   ],
   imports: [
     BrowserModule,
