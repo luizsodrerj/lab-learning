@@ -1,12 +1,20 @@
 
-<div style="margin-top: 35px;">
+<div style="margin-top: 35px;  margin-left: 15px; width: 45%;">
 
+    <label for="formFile" class="form-label">
+      Selecione uma Imagem
+    </label>
     <input 
       (change)="onChangeFile($event)"
-      type="file" 
-      id="file">
-    
+      class="form-control"  
+      id="formFile"
+      type="file">
 </div> 
+<div style="margin-top: 20px; margin-left: 15px;">
+  <button (click)="upload()" type="button" class="btn btn-dark">
+    Upload
+  </button>
+</div>
   
 
 
