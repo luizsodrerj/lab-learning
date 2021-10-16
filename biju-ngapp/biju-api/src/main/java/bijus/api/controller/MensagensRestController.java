@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import bijus.entity.Mensagem;
+import bijus.entity.Mensagens;
 import bijus.service.MensagensService;
 
 @Path("/admin-msg")
@@ -34,10 +35,15 @@ public class MensagensRestController {
 	
 	@GET
 	@Path("/get-all")
-	public List<Mensagem> getMensagens() {
-		List<Mensagem> list = service.findAll(Mensagem.class, null);
+	public Mensagens getMensagens() {
+		List<Mensagem>list  = service.findAll(Mensagem.class, null);
 		
-		return list;
+		return new Mensagens(list);
 	}
 	
 }
+
+
+
+
+
