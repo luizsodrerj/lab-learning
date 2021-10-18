@@ -19,7 +19,7 @@ public class UploadRestController {
 
 	@POST
 	@Consumes({MediaType.MULTIPART_FORM_DATA})
-	public Response uploadPdfFile(
+	public Response uploadFile(
 					  @FormDataParam("file") 
 					  InputStream fileInputStream,
 	                  @FormDataParam("file") 
