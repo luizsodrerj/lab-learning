@@ -5,15 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { AppRoutingModule } from './app-routing.module';
+import { CarouselModule } from 'primeng/carousel';
 import { AppComponent } from './app.component';
 
-import { IndexContentComponent } from '../index/index.content.component';
-import { UpComponent } from '../index/up.component';
+import { IndexContentComponent } from 'src/index/index.content.component';
+import { JoiasComponent } from 'src/index/joias.component';
+import { UpComponent } from 'src/index/up.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     IndexContentComponent,
+    JoiasComponent,
     UpComponent
   ],
   imports: [
@@ -21,7 +24,8 @@ import { UpComponent } from '../index/up.component';
     AppRoutingModule,
     FormsModule,
     NgxMaskModule.forRoot(),
-    HttpClientModule
+    HttpClientModule,
+    CarouselModule
   ],
   providers: [],
   bootstrap: [AppComponent]
