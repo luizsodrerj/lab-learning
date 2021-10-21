@@ -7,10 +7,10 @@ import { AppComponent } from 'src/app/app.component';
 import { Peca } from 'src/vo/peca';
 
 @Component({
-  selector: 'app-joias',
-  templateUrl: './joias.component.html'
+  selector: 'app-semijoias',
+  templateUrl: './semijoias.component.html'
 })
-export class JoiasComponent implements OnInit {
+export class SemiJoiasComponent implements OnInit {
 
   app: AppComponent = new AppComponent();
   pecasList: Peca[] = [];
@@ -23,7 +23,7 @@ export class JoiasComponent implements OnInit {
 
   ngOnInit() {
     const base = this.app.API;
-    let url    = base + '/bijus/get-all-joias';
+    let url    = base + '/bijus/get-all-semijoias';
 
     this.http.get<any>(url)
         .subscribe(dados => {
@@ -32,10 +32,10 @@ export class JoiasComponent implements OnInit {
   }
 
   populate(dados: any) {
-    let viewHelper: PecasViewHelper = new PecasViewHelper(this._sanitizer);
+      let viewHelper: PecasViewHelper = new PecasViewHelper(this._sanitizer);
 
-    this.pecasList = viewHelper.populatePecasData(dados);
+      this.pecasList = viewHelper.populatePecasData(dados);
   }
-  
+
 
 }
