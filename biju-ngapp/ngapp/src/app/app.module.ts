@@ -17,6 +17,8 @@ import { ContatoComponent } from 'src/contato/contato.component';
 import { UpComponent } from 'src/index/up.component';
 import { NavbarComponent } from 'src/estoque/navbar.component';
 import { TipoPecaComponent } from 'src/estoque/cad/tipo-peca.comp';
+import { FooterComponent } from '../footer/footer.component';
+import { HomeAdminComponent } from 'src/estoque/home.admin.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { TipoPecaComponent } from 'src/estoque/cad/tipo-peca.comp';
     ContatoComponent,
     UpComponent,
     NavbarComponent,
-    TipoPecaComponent
+    TipoPecaComponent,
+    FooterComponent,
+    HomeAdminComponent
   ],
   imports: [
     BrowserModule,

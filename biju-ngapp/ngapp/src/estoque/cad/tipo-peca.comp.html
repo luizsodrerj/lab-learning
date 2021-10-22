@@ -1,10 +1,10 @@
 
   <app-navbar></app-navbar>
 
-  <div class="container">
+  <div class="container" style="padding-top: 8rem;">
     <div class="row align-items-stretch mb-5">
       <div class="col-md-6">
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 25px;">
           <span class="ui-float-label">
             <input 
               [placeholder]="tipoPecaPlaceholder"
@@ -17,17 +17,19 @@
         <div class="form-group" style="margin-bottom: 25px">
           <h5>Lista de Tipos de Pe&ccedil;a</h5> 
           <ul>
-            <li *ngFor="let tipoPeca of tiposPeca; let i = index">
-              {{i}} - {{tipoPeca.tipo}}
+            <li *ngFor="let tipoPeca of tiposPeca">
+              {{tipoPeca.tipo}}
             </li>
           </ul> 
         </div>
         <div class="form-group" style="margin-bottom: 37px">
-          <button type="button" class="btn btn-dark">Salvar</button>
+          <button type="button" class="btn btn-dark">
+            Salvar
+          </button>
 
-          {{'  '}}
-
-          <button type="button" class="btn btn-dark">Cancelar</button>
+          <button type="button" class="btn btn-dark" style="margin-left: 15px;">
+            Cancelar
+          </button>
         </div>  
     </div>  
 

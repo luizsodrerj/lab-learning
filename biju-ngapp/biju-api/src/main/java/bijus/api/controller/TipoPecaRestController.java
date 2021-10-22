@@ -9,27 +9,23 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import bijus.entity.TipoPeca;
+import bijus.service.Service;
 import bijus.vo.TiposPecaVO;
-import framework.persistence.jpa.PersistenceServiceUtil;
 
 @Path("/tipo-peca")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class TipoPecaRestController {
 
-	private PersistenceServiceUtil persistence = new PersistenceServiceUtil();
+	private Service service = new Service();
+	
 	
 	@GET
 	@Path("/get-all")
 	public TiposPecaVO getAll() {
-		try {
-			List<TipoPeca>tipos = persistence.findAll(TipoPeca.class,null);
-			
-			return new TiposPecaVO(tipos);
-			
-		} finally {
-			persistence.close();
-		}
+		List<TipoPeca>tipos = service.findAll(TipoPeca.class,null);
+		
+		return new TiposPecaVO(tipos);
 	}
 
 	
