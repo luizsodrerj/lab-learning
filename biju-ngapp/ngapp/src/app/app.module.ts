@@ -5,8 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
 
 import { AppRoutingModule } from './app-routing.module';
-import { CarouselModule } from 'primeng/carousel';
 import { AppComponent } from './app.component';
+
+import { FileUploadModule } from 'primeng/fileupload';
+import { CarouselModule } from 'primeng/carousel';
 
 import { IndexContentComponent } from 'src/index/index.content.component';
 import { SemiJoiasComponent } from 'src/index/semijoias.component';
@@ -15,10 +17,11 @@ import { BijusComponent } from 'src/index/bijus.component';
 import { ContatoFormComponent } from 'src/contato/contato-form.component';
 import { ContatoComponent } from 'src/contato/contato.component';
 import { UpComponent } from 'src/index/up.component';
-import { NavbarComponent } from 'src/estoque/navbar.component';
-import { TipoPecaComponent } from 'src/estoque/cad/tipo-peca.comp';
+import { NavbarComponent } from 'src/app/estoque/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
-import { HomeAdminComponent } from 'src/estoque/home.admin.component';
+import { HomeAdminComponent } from 'src/app/estoque/home.admin.component';
+import { TipoPecaComponent } from 'src/app/estoque/cad/tipo-peca/tipo-peca.comp';
+import { PecaComponent } from 'src/app/estoque/cad/peca/peca.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,8 @@ import { HomeAdminComponent } from 'src/estoque/home.admin.component';
     NavbarComponent,
     TipoPecaComponent,
     FooterComponent,
-    HomeAdminComponent
+    HomeAdminComponent,
+    PecaComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +45,7 @@ import { HomeAdminComponent } from 'src/estoque/home.admin.component';
     FormsModule,
     NgxMaskModule.forRoot(),
     HttpClientModule,
+    FileUploadModule,
     CarouselModule
   ],
   providers: [],
