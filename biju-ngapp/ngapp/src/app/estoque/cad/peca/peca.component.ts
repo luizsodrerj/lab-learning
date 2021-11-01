@@ -20,7 +20,15 @@ export class PecaComponent implements OnInit {
   }
 
   onFileSelect(event) {
-    let fileEvt = event.originalEvent; 
+    const fileEvt       = event.originalEvent; 
+    const selectedFiles = <FileList>fileEvt.srcElement.files;
+    this.file           = selectedFiles[0];
+
+    console.log(this.file.name);
   }
 
+
 }
+
+
+
