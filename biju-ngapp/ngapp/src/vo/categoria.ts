@@ -7,6 +7,21 @@ export class Categoria {
 
 	public categoria: String
     
- 
+	public getCategorias(): Categoria[] {
+		let categorias: Categoria[];
+
+		let biju: Categoria = new Categoria();
+		let semi: Categoria = new Categoria();
+		let joia: Categoria = new Categoria();
+		biju.categoria = this.BIJUTERIA;
+		semi.categoria = this.SEMIJOIA;
+		joia.categoria = this.JOIA;
+	
+		categorias.push(biju);
+		categorias.push(semi);
+		categorias.push(joia);
+
+		return categorias;
+	}
  
 }
