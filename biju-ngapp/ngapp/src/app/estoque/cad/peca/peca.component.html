@@ -35,5 +35,20 @@
       </div>
     </div>  
   </div>  
+  <div class="row">
+    <div class="col-md-10">
+      <div class="form-group div-form-group">
+        <label for="cat" class="form-label">Categoria</label>
+          <p-dropdown 
+              [options]="categorias" 
+              [(ngModel)]="selectedCategoria" 
+              optionLabel="categoria" 
+              optionValue="categoria"
+              class="form-control"
+              id="cat">
+          </p-dropdown>
+      </div>
+    </div>  
+  </div>  
 </div>
 

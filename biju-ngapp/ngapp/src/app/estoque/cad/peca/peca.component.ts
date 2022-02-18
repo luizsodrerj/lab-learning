@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
+import {DropdownModule} from 'primeng/dropdown';
 import { PecaValue } from 'src/vo/pecaValue';
 import { Categoria } from 'src/vo/categoria';
 
@@ -10,19 +11,19 @@ import { Categoria } from 'src/vo/categoria';
 })
 export class PecaComponent implements OnInit {
 
-  categoria: Categoria = new Categoria();
   app: AppComponent = new AppComponent();
   peca: PecaValue = new PecaValue();
 
-  categorias: String[] = [
-                this.categoria.BIJUTERIA,
-                this.categoria.SEMIJOIA,
-                this.categoria.JOIA
-              ];
+  categoria: Categoria = new Categoria();
+  selectedCategoria: String;
+  categorias: Categoria[];
+
   file: File;
 
   
-  constructor() { }
+  constructor() { 
+    this.categorias = this.categoria.getCategorias();
+  }
 
   ngOnInit() {
   }
