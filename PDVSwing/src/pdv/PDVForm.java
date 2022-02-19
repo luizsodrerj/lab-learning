@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,6 +13,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PDVForm extends JFrame {
 
@@ -22,6 +26,7 @@ public class PDVForm extends JFrame {
 	private JTextField txQtd;
 	private JTable carrinhoCompras;
 	private DefaultTableModel tabModel = new DefaultTableModel();
+	private JTextField txValorTotal;
 	
 	
 	public void configTableCarrinho() {
@@ -70,9 +75,14 @@ public class PDVForm extends JFrame {
 		contentPane.add(txProduto);
 		txProduto.setColumns(10);
 		
-		JButton btShowDlgProd = new JButton("...");
-		btShowDlgProd.setBounds(487, 8, 58, 29);
-		contentPane.add(btShowDlgProd);
+		JButton btShowDlgProdutos = new JButton("...");
+		btShowDlgProdutos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showDlgProdutos();
+			}
+		});
+		btShowDlgProdutos.setBounds(487, 8, 58, 29);
+		contentPane.add(btShowDlgProdutos);
 		
 		JLabel lblQtd = new JLabel("Qtd.");
 		lblQtd.setBounds(22, 49, 70, 15);
@@ -88,7 +98,7 @@ public class PDVForm extends JFrame {
 		contentPane.add(btnAdicionar);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 86, 533, 270);
+		panel.setBounds(12, 86, 533, 240);
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -105,5 +115,24 @@ public class PDVForm extends JFrame {
 		JButton btnListarVendas = new JButton("Listar Vendas");
 		btnListarVendas.setBounds(180, 375, 185, 37);
 		contentPane.add(btnListarVendas);
+		
+		txValorTotal = new JTextField();
+		txValorTotal.setBounds(391, 336, 154, 29);
+		contentPane.add(txValorTotal);
+		txValorTotal.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Valor Total");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel.setBounds(280, 344, 102, 13);
+		contentPane.add(lblNewLabel);
+	}
+
+	protected void showDlgProdutos() {
+		ProdutosDlg dialog = new ProdutosDlg();
+		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		dialog.setVisible(true);
+		dialog.configTableProdutos();
 	}
 }
+
+
