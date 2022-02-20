@@ -60,7 +60,7 @@ public class PDVForm extends JFrame {
 	 */
 	public PDVForm() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 567, 454);
+		setBounds(100, 100, 684, 454);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -75,13 +75,13 @@ public class PDVForm extends JFrame {
 		contentPane.add(txProduto);
 		txProduto.setColumns(10);
 		
-		JButton btShowDlgProdutos = new JButton("...");
+		JButton btShowDlgProdutos = new JButton("Selecionar Produto");
 		btShowDlgProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showDlgProdutos();
 			}
 		});
-		btShowDlgProdutos.setBounds(487, 8, 58, 29);
+		btShowDlgProdutos.setBounds(487, 8, 173, 29);
 		contentPane.add(btShowDlgProdutos);
 		
 		JLabel lblQtd = new JLabel("Qtd.");
@@ -98,7 +98,7 @@ public class PDVForm extends JFrame {
 		contentPane.add(btnAdicionar);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 86, 533, 240);
+		panel.setBounds(12, 86, 648, 240);
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -109,26 +109,26 @@ public class PDVForm extends JFrame {
 		scrollPane.setViewportView(carrinhoCompras);
 		
 		JButton btnRegistrarVenda = new JButton("Registrar Venda");
-		btnRegistrarVenda.setBounds(377, 375, 168, 37);
+		btnRegistrarVenda.setBounds(492, 375, 168, 37);
 		contentPane.add(btnRegistrarVenda);
 		
 		JButton btnListarVendas = new JButton("Listar Vendas");
-		btnListarVendas.setBounds(180, 375, 185, 37);
+		btnListarVendas.setBounds(299, 375, 185, 37);
 		contentPane.add(btnListarVendas);
 		
 		txValorTotal = new JTextField();
-		txValorTotal.setBounds(391, 336, 154, 29);
+		txValorTotal.setBounds(506, 336, 154, 29);
 		contentPane.add(txValorTotal);
 		txValorTotal.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Valor Total");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel.setBounds(280, 344, 102, 13);
+		lblNewLabel.setBounds(396, 344, 102, 13);
 		contentPane.add(lblNewLabel);
 	}
 
 	protected void showDlgProdutos() {
-		ProdutosDlg dialog = new ProdutosDlg();
+		ProdutosDlg dialog = new ProdutosDlg(this);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);
 		dialog.configTableProdutos();

@@ -15,7 +15,14 @@ public class ProdutosDlg extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JTable tabProdutos;
 	private DefaultTableModel tabModel = new DefaultTableModel();
+	private PDVForm pdv;
 
+	
+	public ProdutosDlg(PDVForm pdv) {
+		this();
+		
+		this.pdv = pdv;
+	}
 	
 	public void configTableProdutos() {
 		tabProdutos.setModel(tabModel);

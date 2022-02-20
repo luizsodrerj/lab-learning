@@ -35,31 +35,31 @@ public class IncluirProdutoDlg extends JDialog {
 	 * Create the dialog.
 	 */
 	public IncluirProdutoDlg() {
-		setBounds(100, 100, 450, 196);
+		setBounds(100, 100, 542, 196);
 		getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Nome do Produto");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel.setBounds(8, 13, 92, 13);
+		lblNewLabel.setBounds(8, 13, 155, 13);
 		getContentPane().add(lblNewLabel);
 		
 		txNomeProduto = new JTextField();
-		txNomeProduto.setBounds(108, 7, 318, 26);
+		txNomeProduto.setBounds(171, 7, 347, 26);
 		getContentPane().add(txNomeProduto);
 		txNomeProduto.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Pre\u00E7o");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_1.setBounds(21, 49, 79, 13);
+		lblNewLabel_1.setBounds(84, 49, 79, 13);
 		getContentPane().add(lblNewLabel_1);
 		
 		txPreco = new JTextField();
-		txPreco.setBounds(107, 43, 138, 26);
+		txPreco.setBounds(171, 43, 138, 26);
 		getContentPane().add(txPreco);
 		txPreco.setColumns(10);
 		
 		JButton btnSalvar = new JButton("Salvar");
-		btnSalvar.setBounds(108, 79, 137, 26);
+		btnSalvar.setBounds(172, 79, 137, 26);
 		getContentPane().add(btnSalvar);
 
 	}
