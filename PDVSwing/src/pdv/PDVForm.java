@@ -27,7 +27,14 @@ public class PDVForm extends JFrame {
 	private JTable carrinhoCompras;
 	private DefaultTableModel tabModel = new DefaultTableModel();
 	private JTextField txValorTotal;
+
+	private Produto produtoSelecionado;
 	
+	
+	public void selecionarProduto(Produto produto) {
+		produtoSelecionado = produto;
+		txProduto.setText(produtoSelecionado.getNome());
+	}
 	
 	public void configTableCarrinho() {
 		carrinhoCompras.setModel(tabModel);
@@ -94,6 +101,11 @@ public class PDVForm extends JFrame {
 		txQtd.setColumns(10);
 		
 		JButton btnAdicionar = new JButton("Adicionar Produto");
+		btnAdicionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				adicionarProduto();
+			}
+		});
 		btnAdicionar.setBounds(236, 44, 239, 30);
 		contentPane.add(btnAdicionar);
 		
@@ -125,6 +137,10 @@ public class PDVForm extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel.setBounds(396, 344, 102, 13);
 		contentPane.add(lblNewLabel);
+	}
+
+	protected void adicionarProduto() {
+		
 	}
 
 	protected void showDlgProdutos() {

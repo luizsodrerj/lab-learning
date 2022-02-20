@@ -4,9 +4,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.persistence.EntityManager;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class IncluirProdutoDlg extends JDialog {
 
@@ -59,8 +63,41 @@ public class IncluirProdutoDlg extends JDialog {
 		txPreco.setColumns(10);
 		
 		JButton btnSalvar = new JButton("Salvar");
+		btnSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				incluirProduto();
+			}
+		});
 		btnSalvar.setBounds(172, 79, 137, 26);
 		getContentPane().add(btnSalvar);
 
 	}
+
+	protected void incluirProduto() {
+		EntityManager em = null;
+		
+		try {
+			em = JPAUtil.getEntityManager();
+			em.getTransaction().begin();
+
+			Produto produto = new Produto();
+			produto.setNome(txNomeProduto.getText());
+			produto.setPreco(Double.valueOf(txPreco.getText()));
+			em.persist(produto);
+			
+			em.getTransaction().commit();
+
+			txNomeProduto.setText("");
+			txPreco.setText("");
+			
+			JOptionPane.showMessageDialog(this, "Produto salvo com sucesso!");
+			
+		} finally {
+			em.close();
+		}
+	}
 }
+
+
+
+
