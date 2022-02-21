@@ -15,6 +15,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 
 public class PDVForm extends JFrame {
@@ -28,6 +31,8 @@ public class PDVForm extends JFrame {
 	private DefaultTableModel tabModel = new DefaultTableModel();
 	private JTextField txValorTotal;
 
+	private List<ItemVenda>carrinhoItens = new ArrayList<ItemVenda>();
+	private Venda venda = new Venda();
 	private Produto produtoSelecionado;
 	
 	
@@ -38,7 +43,6 @@ public class PDVForm extends JFrame {
 	
 	public void configTableCarrinho() {
 		carrinhoCompras.setModel(tabModel);
-		
 		tabModel.addColumn("Produto");
 		tabModel.addColumn("Qtd.");
 		tabModel.addColumn("Preco");
@@ -140,7 +144,19 @@ public class PDVForm extends JFrame {
 	}
 
 	protected void adicionarProduto() {
+		Vector<String>row = new Vector<String>();
 		
+		row.add(produtoSelecionado.getNome());
+		row.add(txQtd.getText());
+		row.add(produtoSelecionado.getPreco().toString());
+		tabModel.addRow(row);
+		
+		ItemVenda item = new ItemVenda();
+		item.setProduto(produtoSelecionado);
+		item.setQuantidade(Integer.valueOf(txQtd.getText()));
+		carrinhoItens.add(item);
+		venda.getCarrinho().add(item);
+		txValorTotal.setText(venda.getValorTotal().toString());
 	}
 
 	protected void showDlgProdutos() {
