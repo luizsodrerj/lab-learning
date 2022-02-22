@@ -24,6 +24,8 @@ public class ProdutosDlg extends JDialog {
 	
 	public ProdutosDlg(PDVForm pdv) {
 		this();
+		configTableProdutos();
+		setModal(true);
 		
 		this.pdv = pdv;
 	}

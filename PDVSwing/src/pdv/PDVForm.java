@@ -2,23 +2,25 @@ package pdv;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
+import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.SwingConstants;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
-import java.awt.event.ActionEvent;
 
 public class PDVForm extends JFrame {
 
@@ -31,7 +33,6 @@ public class PDVForm extends JFrame {
 	private DefaultTableModel tabModel = new DefaultTableModel();
 	private JTextField txValorTotal;
 
-	private List<ItemVenda>carrinhoItens = new ArrayList<ItemVenda>();
 	private Venda venda = new Venda();
 	private Produto produtoSelecionado;
 	
@@ -125,10 +126,20 @@ public class PDVForm extends JFrame {
 		scrollPane.setViewportView(carrinhoCompras);
 		
 		JButton btnRegistrarVenda = new JButton("Registrar Venda");
+		btnRegistrarVenda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				registrarVenda();
+			}
+		});
 		btnRegistrarVenda.setBounds(492, 375, 168, 37);
 		contentPane.add(btnRegistrarVenda);
 		
 		JButton btnListarVendas = new JButton("Listar Vendas");
+		btnListarVendas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showDlgVendas();
+			}
+		});
 		btnListarVendas.setBounds(299, 375, 185, 37);
 		contentPane.add(btnListarVendas);
 		
@@ -143,6 +154,43 @@ public class PDVForm extends JFrame {
 		contentPane.add(lblNewLabel);
 	}
 
+	protected void registrarVenda() {
+		EntityManager em = null;
+		
+		try {
+			em = JPAUtil.getEntityManager();
+			em.getTransaction().begin();
+
+			List<ItemVenda>carrinho = venda.getCarrinho();
+			venda.setDataVenda(new Date());
+			em.persist(venda);
+			
+			for (ItemVenda item: carrinho) {
+				Integer idProd  = item.getProduto().getId();
+				Produto produto = em.find(Produto.class, idProd);
+				item.setProduto(produto);
+				item.setVenda(venda);
+				em.persist(item);
+			}
+			em.getTransaction().commit();
+			
+			JOptionPane.showMessageDialog(this,"Venda Registrada com Sucesso");
+			
+			tabModel.setRowCount(0);
+			txValorTotal.setText("");
+			venda = new Venda();
+			
+		} finally {
+			em.close();
+		}
+	}
+
+	protected void showDlgVendas() {
+		VendasDlg vendas = new VendasDlg(true);
+		vendas.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		vendas.setVisible(true);
+	}
+
 	protected void adicionarProduto() {
 		Vector<String>row = new Vector<String>();
 		
@@ -154,16 +202,17 @@ public class PDVForm extends JFrame {
 		ItemVenda item = new ItemVenda();
 		item.setProduto(produtoSelecionado);
 		item.setQuantidade(Integer.valueOf(txQtd.getText()));
-		carrinhoItens.add(item);
 		venda.getCarrinho().add(item);
 		txValorTotal.setText(venda.getValorTotal().toString());
+		
+		txProduto.setText("");
+		txQtd.setText("");
 	}
 
 	protected void showDlgProdutos() {
 		ProdutosDlg dialog = new ProdutosDlg(this);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);
-		dialog.configTableProdutos();
 	}
 }
 
