@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from 'src/app/app.component';
-import {DropdownModule} from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
 import { PecaValue } from 'src/vo/pecaValue';
 import { Categoria } from 'src/vo/categoria';
 
@@ -20,8 +20,8 @@ export class PecaComponent implements OnInit {
 
   file: File;
 
-  
-  constructor() { 
+
+  constructor() {
     this.categorias = this.categoria.getCategorias();
   }
 
@@ -29,7 +29,7 @@ export class PecaComponent implements OnInit {
   }
 
   onFileSelect(event) {
-    const fileEvt       = event.originalEvent; 
+    const fileEvt       = event.originalEvent;
     const selectedFiles = <FileList>fileEvt.srcElement.files;
     this.file           = selectedFiles[0];
 

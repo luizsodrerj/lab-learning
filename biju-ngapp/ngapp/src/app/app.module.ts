@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 
 import { FileUploadModule } from 'primeng/fileupload';
 import { CarouselModule } from 'primeng/carousel';
+import { DropdownModule } from 'primeng/dropdown';
 
 import { IndexContentComponent } from 'src/index/index.content.component';
 import { SemiJoiasComponent } from 'src/index/semijoias.component';
@@ -46,12 +47,13 @@ import { PecaComponent } from 'src/app/estoque/cad/peca/peca.component';
     NgxMaskModule.forRoot(),
     HttpClientModule,
     FileUploadModule,
-    CarouselModule
+    CarouselModule,
+    DropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
 }
 
 
