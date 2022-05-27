@@ -1,6 +1,7 @@
 package persistencia;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +46,23 @@ public class MainApp {
 		}
 	}
 	
-	void buscarPorId(EntityManager manager, Integer id) {
+	private void updateCliente(Cliente cliente, EntityManager manager) {
+		manager.getTransaction().begin();
+		
+		String nome = cliente.getNomeRazaoSocial();
+		Date dataCad = cliente.getDataCadastro();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(dataCad);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		
+		cliente.setDataCadastro(cal.getTime());
+		cliente.setNomeRazaoSocial(nome + " atualizada em: " + cliente.getDataCadastro().toString());
+		manager.merge(cliente);
+		
+		manager.getTransaction().commit();
+	}
+	
+	private Cliente buscarPorId(EntityManager manager, Integer id) {
 		Cliente cliente = manager.find(Cliente.class, id);
 		
 		System.out.println("-------------------");
@@ -55,6 +72,8 @@ public class MainApp {
 		Date data = cliente.getDataCadastro();
 		String dtFormatada = new SimpleDateFormat("dd/MM/yyyy").format(data);
 		System.out.println("data cadastro - "+dtFormatada);
+		
+		return cliente;
 	}
 	
 	public static void main(String[] args) {
@@ -70,7 +89,11 @@ public class MainApp {
 			app.listarClientes(manager);
 			
 			app.buscarPorId(manager, 2);
-			app.buscarPorId(manager, 1);
+			Cliente cliente = app.buscarPorId(manager, 1);
+			
+			app.updateCliente(cliente, manager);
+			
+			cliente = app.buscarPorId(manager, 1);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
