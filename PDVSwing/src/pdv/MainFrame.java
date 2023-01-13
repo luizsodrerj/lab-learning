@@ -29,6 +29,7 @@ public class MainFrame extends JFrame {
 	void showPDVForm() {
 		PDVForm frame = new PDVForm();
 		Window.centralizeWindow(frame);
+		frame.configTableCarrinho();
 		frame.setVisible(true);
 	}
 

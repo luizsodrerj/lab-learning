@@ -30,13 +30,40 @@ public class ItemVenda implements Serializable {
 	@Column(name = "qtd")
 	private Integer quantidade;
 	
+	@Column(name = "preco")
+	private Double preco;
+
+	@Column(name = "nome")
+	private String nome;
+
 	
 	public ItemVenda() {
-		// TODO Auto-generated constructor stub
+	}
+
+	public void copy(Produto produto) {
+		preco 		 = produto.getPreco();
+		nome 		 = produto.getNome();
+		this.produto = produto;
+	}
+	
+	public Double getPreco() {
+		return preco;
+	}
+
+	public void setPreco(Double preco) {
+		this.preco = preco;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public Double getValorTotal() {
-		return quantidade * produto.getPreco();
+		return quantidade * preco;
 	}
 
 	public Integer getId() {
