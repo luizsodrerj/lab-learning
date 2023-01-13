@@ -15,8 +15,11 @@ public class Produto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	private String codigo;
 	private String nome;
 	private Double preco;
+	
+	
 	
 	public Produto() {
 	}
@@ -43,6 +46,14 @@ public class Produto implements Serializable {
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	

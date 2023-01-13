@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,6 +18,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
+import framework.persistence.jpa.PersistenceServiceUtil;
+
 public class VendasDlg extends JDialog {
 
 	private static final long serialVersionUID = 1L;
@@ -29,7 +30,8 @@ public class VendasDlg extends JDialog {
 	private DefaultTableModel carrinhoModel = new DefaultTableModel();
 	private DefaultTableModel vendasModel = new DefaultTableModel();
 	
-
+	private PersistenceServiceUtil persistence = new PersistenceServiceUtil();
+	
 	
 	public VendasDlg(boolean modal) {
 		this();
@@ -60,11 +62,8 @@ public class VendasDlg extends JDialog {
 		int row    = tabVendas.getSelectedRow();
 		Integer id = Integer.valueOf(tabVendas.getValueAt(row, 0).toString());
 
-		EntityManager em = null;
-
 		try {
-			em = JPAUtil.getEntityManager();
-			Venda venda = em.find(Venda.class, id);
+			Venda venda = persistence.findObject(Venda.class, id);
 			List<ItemVenda>carrinho = venda.getCarrinho();
 
 			carrinhoModel.setRowCount(0); 
@@ -79,17 +78,13 @@ public class VendasDlg extends JDialog {
 			txValorTotal.setText(venda.getValorTotal().toString());
 			
 		} finally {
-			em.close();
+			persistence.close();
 		}
 	}
 
 	private void preencherVendas() {
-		EntityManager em = null;
-		
 		try {
-			em = JPAUtil.getEntityManager();
-			List<Venda> vendas = em.createQuery("select v from Venda v")
-								   .getResultList();
+			List<Venda> vendas = persistence.findByQuery("select v from Venda v",null);
 			
 			for (Venda venda : vendas) {
 				Vector<String>dados = new Vector<String>();
@@ -99,7 +94,7 @@ public class VendasDlg extends JDialog {
 				vendasModel.addRow(dados);
 			}
 		} finally {
-			em.close();
+			persistence.close();
 		}
 	}
 

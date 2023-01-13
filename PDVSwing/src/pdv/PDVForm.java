@@ -2,13 +2,12 @@ package pdv;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Date;
-import java.util.List;
 import java.util.Vector;
 
-import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -21,6 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import framework.presentation.swing.Window;
+import persistence.VendasRepo;
 
 public class PDVForm extends JFrame {
 
@@ -35,6 +37,8 @@ public class PDVForm extends JFrame {
 
 	private Venda venda = new Venda();
 	private Produto produtoSelecionado;
+
+	private VendasRepo vendasRepo = new VendasRepo();
 	
 	
 	public void selecionarProduto(Produto produto) {
@@ -71,7 +75,8 @@ public class PDVForm extends JFrame {
 	 * Create the frame.
 	 */
 	public PDVForm() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 684, 454);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -79,7 +84,9 @@ public class PDVForm extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblProduto = new JLabel("Produto");
-		lblProduto.setBounds(12, 15, 80, 15);
+		lblProduto.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblProduto.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblProduto.setBounds(12, 15, 70, 15);
 		contentPane.add(lblProduto);
 		
 		txProduto = new JTextField();
@@ -88,6 +95,7 @@ public class PDVForm extends JFrame {
 		txProduto.setColumns(10);
 		
 		JButton btShowDlgProdutos = new JButton("Selecionar Produto");
+		btShowDlgProdutos.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btShowDlgProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showDlgProdutos();
@@ -97,7 +105,9 @@ public class PDVForm extends JFrame {
 		contentPane.add(btShowDlgProdutos);
 		
 		JLabel lblQtd = new JLabel("Qtd.");
-		lblQtd.setBounds(22, 49, 70, 15);
+		lblQtd.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblQtd.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblQtd.setBounds(12, 52, 70, 15);
 		contentPane.add(lblQtd);
 		
 		txQtd = new JTextField();
@@ -106,6 +116,7 @@ public class PDVForm extends JFrame {
 		txQtd.setColumns(10);
 		
 		JButton btnAdicionar = new JButton("Adicionar Produto");
+		btnAdicionar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnAdicionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				adicionarProduto();
@@ -126,6 +137,7 @@ public class PDVForm extends JFrame {
 		scrollPane.setViewportView(carrinhoCompras);
 		
 		JButton btnRegistrarVenda = new JButton("Registrar Venda");
+		btnRegistrarVenda.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnRegistrarVenda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				registrarVenda();
@@ -135,6 +147,7 @@ public class PDVForm extends JFrame {
 		contentPane.add(btnRegistrarVenda);
 		
 		JButton btnListarVendas = new JButton("Listar Vendas");
+		btnListarVendas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnListarVendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showDlgVendas();
@@ -149,40 +162,22 @@ public class PDVForm extends JFrame {
 		txValorTotal.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Valor Total");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel.setBounds(396, 344, 102, 13);
 		contentPane.add(lblNewLabel);
 	}
 
 	protected void registrarVenda() {
-		EntityManager em = null;
-		
-		try {
-			em = JPAUtil.getEntityManager();
-			em.getTransaction().begin();
-
-			List<ItemVenda>carrinho = venda.getCarrinho();
 			venda.setDataVenda(new Date());
-			em.persist(venda);
-			
-			for (ItemVenda item: carrinho) {
-				Integer idProd  = item.getProduto().getId();
-				Produto produto = em.find(Produto.class, idProd);
-				item.setProduto(produto);
-				item.setVenda(venda);
-				em.persist(item);
-			}
-			em.getTransaction().commit();
+
+			vendasRepo.persistVenda(venda);
 			
 			JOptionPane.showMessageDialog(this,"Venda Registrada com Sucesso");
 			
 			tabModel.setRowCount(0);
 			txValorTotal.setText("");
 			venda = new Venda();
-			
-		} finally {
-			em.close();
-		}
 	}
 
 	protected void showDlgVendas() {
@@ -211,9 +206,12 @@ public class PDVForm extends JFrame {
 
 	protected void showDlgProdutos() {
 		ProdutosDlg dialog = new ProdutosDlg(this);
+		Window.centralizeWindow(dialog);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);
 	}
 }
+
+
 
 

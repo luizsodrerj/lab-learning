@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -14,9 +13,17 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import framework.presentation.swing.Window;
+import persistence.ProdutosRepo;
+import java.awt.Font;
+
 public class ProdutosDlg extends JDialog {
 
 	private static final long serialVersionUID = 1L;
+	
+	
+	private ProdutosRepo produtosRepo = new ProdutosRepo();
+	
 	private JTable tabProdutos;
 	private DefaultTableModel tabModel = new DefaultTableModel();
 	private PDVForm pdv;
@@ -76,6 +83,7 @@ public class ProdutosDlg extends JDialog {
 		scrollPane.setViewportView(tabProdutos);
 		
 		JButton btnSelecionar = new JButton("Selecionar Produto");
+		btnSelecionar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnSelecionar.setBounds(345, 277, 180, 30);
 		getContentPane().add(btnSelecionar);
 		btnSelecionar.addActionListener(new ActionListener() {
@@ -85,6 +93,7 @@ public class ProdutosDlg extends JDialog {
 		});
 		
 		JButton btnNovoProduto = new JButton("Novo Produto");
+		btnNovoProduto.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNovoProduto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				showIncluirProdutoDlg();
@@ -94,6 +103,7 @@ public class ProdutosDlg extends JDialog {
 		getContentPane().add(btnNovoProduto);
 		
 		JButton btnListarProdutos = new JButton("Listar Produtos");
+		btnListarProdutos.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnListarProdutos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				listarProdutos();
@@ -118,12 +128,8 @@ public class ProdutosDlg extends JDialog {
 	}
 
 	protected void listarProdutos() {
-		EntityManager em = null;
-		
 		try {
-			em = JPAUtil.getEntityManager();
-			List<Produto>list = em.createQuery("select p from Produto p order by p.nome")
-								  .getResultList();
+			List<Produto>list = produtosRepo.getProdutos();
 			
 			tabModel.setRowCount(0);
 			
@@ -136,16 +142,21 @@ public class ProdutosDlg extends JDialog {
 					}
 				);
 			}
-		} finally {
-			em.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	protected void showIncluirProdutoDlg() {
 		IncluirProdutoDlg dialog = new IncluirProdutoDlg();
+		Window.centralizeWindow(dialog);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);
 	}
 	
+
 	
 }
+
+
+
