@@ -10,7 +10,7 @@ public class App {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Window.setSystemLookAndFeel();
+					//Window.setSystemLookAndFeel();
 					
 					MainFrame frame = new MainFrame();
 					Window.centralizeWindow(frame);

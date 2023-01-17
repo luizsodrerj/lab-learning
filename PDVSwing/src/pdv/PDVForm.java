@@ -23,7 +23,12 @@ import javax.swing.table.TableColumnModel;
 
 import framework.presentation.swing.Window;
 import framework.util.FormatNumberUtil;
+import persistence.ProdutosRepo;
 import persistence.VendasRepo;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class PDVForm extends JFrame {
 
@@ -35,13 +40,83 @@ public class PDVForm extends JFrame {
 	private JTable carrinhoCompras;
 	private DefaultTableModel tabModel = new DefaultTableModel();
 	private JTextField txValorTotal;
-
+	private JLabel descProduto;
+	
 	private Produto produtoSelecionado;
 	
 	private Venda venda = new Venda();
 
+	private ProdutosRepo produtosRepo = new ProdutosRepo();
 	private VendasRepo vendasRepo = new VendasRepo();
 	
+	
+
+	protected void registrarVenda() {
+		venda.setDataVenda(new Date());
+	
+		vendasRepo.persistVenda(venda);
+		
+		JOptionPane.showMessageDialog(this,"Venda Registrada com Sucesso");
+		
+		tabModel.setRowCount(0);
+		txValorTotal.setText("");
+		venda = new Venda();
+	}
+	
+	public void onKeyPressTxProduto() {
+		String prod = txProduto.getText();
+		
+		Produto produto = produtosRepo.findProdutoByNomeOuCodigo(prod);
+		
+		if (produto != null) {
+			descProduto.setText(produto.getNome());
+			produtoSelecionado = produto;
+		} else {
+			descProduto.setText("");
+			produtoSelecionado = null;
+		}
+	}
+
+	public void adicionarProduto() {
+		Vector<String>row = new Vector<String>();
+		
+		ItemVenda item = new ItemVenda();
+		item.copy(produtoSelecionado);
+		item.setQuantidade(Integer.valueOf(txQtd.getText()));
+		venda.getCarrinho().add(item);
+		
+		txValorTotal.setText(
+			FormatNumberUtil.format(
+				venda.getTotalVendas(), 
+				FormatNumberUtil.DUAS_CASAS_DECIMAIS
+			)
+		);
+		row.add(produtoSelecionado.getNome());
+		row.add(txQtd.getText());
+		row.add(
+			FormatNumberUtil.format(
+				produtoSelecionado.getPreco(), 
+				FormatNumberUtil.DUAS_CASAS_DECIMAIS
+			)
+		);
+		row.add(
+			FormatNumberUtil.format(
+				item.getValorTotal(), 
+				FormatNumberUtil.DUAS_CASAS_DECIMAIS
+			)
+		);
+		tabModel.addRow(row);
+		
+		resetFields();
+	}
+
+	private void resetFields() {
+		this.produtoSelecionado = null;
+		
+		descProduto.setText("");
+		txProduto.setText("");
+		txQtd.setText("1");
+	}
 	
 	public void selecionarProduto(Produto produto) {
 		produtoSelecionado = produto;
@@ -63,40 +138,12 @@ public class PDVForm extends JFrame {
 		columnModel.getColumn(1).setPreferredWidth(80);
 		columnModel.getColumn(2).setPreferredWidth(110);
 		columnModel.getColumn(3).setPreferredWidth(150);
+		
+		postConstruct();
 	}
 
-	public void adicionarProduto() {
-		Vector<String>row = new Vector<String>();
-		
-		ItemVenda item = new ItemVenda();
-		item.copy(produtoSelecionado);
-		item.setQuantidade(Integer.valueOf(txQtd.getText()));
-		venda.getCarrinho().add(item);
-		
-		txValorTotal.setText(
-			FormatNumberUtil.format(
-				venda.getValorTotal(), 
-				FormatNumberUtil.DUAS_CASAS_DECIMAIS
-			)
-		);
-		row.add(produtoSelecionado.getNome());
-		row.add(txQtd.getText());
-		row.add(
-			FormatNumberUtil.format(
-				produtoSelecionado.getPreco(), 
-				FormatNumberUtil.DUAS_CASAS_DECIMAIS
-			)
-		);
-		row.add(
-			FormatNumberUtil.format(
-				item.getValorTotal(), 
-				FormatNumberUtil.DUAS_CASAS_DECIMAIS
-			)
-		);
-		tabModel.addRow(row);
-		
-		txProduto.setText("");
-		txQtd.setText("");
+	private void postConstruct() {
+		txQtd.setText("1");
 	}
 	
 	/**
@@ -105,7 +152,7 @@ public class PDVForm extends JFrame {
 	public PDVForm() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 863, 454);
+		setBounds(100, 100, 863, 503);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -118,6 +165,12 @@ public class PDVForm extends JFrame {
 		contentPane.add(lblProduto);
 		
 		txProduto = new JTextField();
+		txProduto.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				onKeyPressTxProduto();
+			}
+		});
 		txProduto.setBounds(89, 8, 575, 29);
 		contentPane.add(txProduto);
 		txProduto.setColumns(10);
@@ -135,11 +188,11 @@ public class PDVForm extends JFrame {
 		JLabel lblQtd = new JLabel("Qtd.");
 		lblQtd.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblQtd.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblQtd.setBounds(12, 52, 70, 15);
+		lblQtd.setBounds(12, 102, 70, 15);
 		contentPane.add(lblQtd);
 		
 		txQtd = new JTextField();
-		txQtd.setBounds(89, 45, 135, 29);
+		txQtd.setBounds(89, 95, 135, 29);
 		contentPane.add(txQtd);
 		txQtd.setColumns(10);
 		
@@ -150,11 +203,11 @@ public class PDVForm extends JFrame {
 				adicionarProduto();
 			}
 		});
-		btnAdicionar.setBounds(236, 44, 239, 30);
+		btnAdicionar.setBounds(236, 94, 239, 30);
 		contentPane.add(btnAdicionar);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 86, 835, 240);
+		panel.setBounds(12, 135, 835, 240);
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -171,7 +224,7 @@ public class PDVForm extends JFrame {
 				registrarVenda();
 			}
 		});
-		btnRegistrarVenda.setBounds(679, 377, 168, 37);
+		btnRegistrarVenda.setBounds(679, 426, 168, 37);
 		contentPane.add(btnRegistrarVenda);
 		
 		JButton btnListarVendas = new JButton("Listar Vendas");
@@ -181,32 +234,26 @@ public class PDVForm extends JFrame {
 				showDlgVendas();
 			}
 		});
-		btnListarVendas.setBounds(486, 377, 185, 37);
+		btnListarVendas.setBounds(479, 426, 185, 37);
 		contentPane.add(btnListarVendas);
 		
 		txValorTotal = new JTextField();
 		txValorTotal.setHorizontalAlignment(SwingConstants.RIGHT);
-		txValorTotal.setBounds(693, 337, 154, 29);
+		txValorTotal.setBounds(679, 386, 168, 29);
 		contentPane.add(txValorTotal);
 		txValorTotal.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Valor Total");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel.setBounds(583, 345, 102, 13);
+		lblNewLabel.setBounds(565, 394, 102, 13);
 		contentPane.add(lblNewLabel);
-	}
-
-	protected void registrarVenda() {
-			venda.setDataVenda(new Date());
-
-			vendasRepo.persistVenda(venda);
-			
-			JOptionPane.showMessageDialog(this,"Venda Registrada com Sucesso");
-			
-			tabModel.setRowCount(0);
-			txValorTotal.setText("");
-			venda = new Venda();
+		
+		descProduto = new JLabel("");
+		descProduto.setBorder(new LineBorder(new Color(0, 0, 0)));
+		descProduto.setFont(new Font("Tahoma", Font.BOLD, 11));
+		descProduto.setBounds(89, 48, 575, 36);
+		contentPane.add(descProduto);
 	}
 
 	protected void showDlgVendas() {

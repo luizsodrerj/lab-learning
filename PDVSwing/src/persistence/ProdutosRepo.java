@@ -46,6 +46,32 @@ public class ProdutosRepo {
 			persistence.close();
 		}
 	}
+
+	public Produto findProdutoByNomeOuCodigo(String nomeOuCodigo) {
+		try {
+			List<Produto>result = persistence.findByQuery(
+				  "select p from Produto p "
+				+ "where ( "
+				+ "	upper(p.nome) like upper(?1) "
+				+ " or   p.codigo like ?2 "
+				+ ")"
+				+ "order by p.nome", 
+				new Object[] {
+					"%"	+ nomeOuCodigo + "%",
+					"%"	+ nomeOuCodigo + "%"
+				}
+			);
+			return !result.isEmpty() ?
+					result.get(0) :
+					null;
+					  
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			persistence.close();
+		}
+	}
 	
 	public List<Produto> findProduto(String nome) {
 		try {

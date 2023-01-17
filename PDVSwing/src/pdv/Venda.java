@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 public class Venda implements Serializable {
@@ -28,15 +29,36 @@ public class Venda implements Serializable {
 	@OneToMany(mappedBy = "venda")
 	private List<ItemVenda>carrinho = new ArrayList<ItemVenda>();
 	
+	@Transient
+	private List<ItemVenda> itens = new ArrayList<>();
+	
 	
 	public Venda() {
 	}
 
+	public void initCarrinho() {
+		itens.addAll(getCarrinho());
+	}
+	
+	public List<ItemVenda> getCarrinhoCompras() {
+		return itens;
+	}
 
-	public Double getValorTotal() {
-		Double total = 0D;
+	public Double getTotalVendas() {
+		List<ItemVenda> itens = getCarrinho(); 
+		Double total 		  = 0D;
 		
-		for (ItemVenda itemVenda : carrinho) {
+		for (ItemVenda itemVenda : itens) {
+			total += itemVenda.getValorTotal();
+		}
+		return total;
+	}
+	
+	public Double getValorTotal() {
+		List<ItemVenda> itens = getCarrinhoCompras(); 
+		Double total 		  = 0D;
+		
+		for (ItemVenda itemVenda : itens) {
 			total += itemVenda.getValorTotal();
 		}
 		return total;

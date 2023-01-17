@@ -3,6 +3,7 @@ package pdv;
 import java.awt.Font;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
@@ -25,6 +26,14 @@ public class MainFrame extends JFrame {
 	
 	private JPanel contentPane;
 
+
+	
+	void showVendas() {
+		VendasDlg vendas = new VendasDlg(true);
+		vendas.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		Window.centralizeWindow(vendas);
+		vendas.setVisible(true);
+	}
 	
 	void showPDVForm() {
 		PDVForm frame = new PDVForm();
@@ -83,6 +92,11 @@ public class MainFrame extends JFrame {
 		contentPane.add(btCadProdutos);
 		
 		JButton btnRelatrioDeVendas = new JButton("Relat\u00F3rio de Vendas");
+		btnRelatrioDeVendas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showVendas();
+			}
+		});
 		btnRelatrioDeVendas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnRelatrioDeVendas.setBounds(414, 11, 189, 47);
 		contentPane.add(btnRelatrioDeVendas);
@@ -102,4 +116,5 @@ public class MainFrame extends JFrame {
 		lblNewLabel.setIcon(new ImageIcon(MainFrame.class.getResource("/resources/img/car.png")));
 		panel.add(lblNewLabel, BorderLayout.CENTER);
 	}
+
 }
