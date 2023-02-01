@@ -1,13 +1,19 @@
 package pdv;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,17 +24,22 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import org.apache.commons.lang3.StringUtils;
+
 import framework.presentation.swing.Window;
 import framework.util.FormatNumberUtil;
+import framework.util.NumberUtil;
+import pdv.domain.FormaPagamento;
+import pdv.domain.ItemVenda;
+import pdv.domain.Produto;
+import pdv.domain.Venda;
+import persistence.FormaRepo;
 import persistence.ProdutosRepo;
 import persistence.VendasRepo;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class PDVForm extends JFrame {
 
@@ -41,6 +52,7 @@ public class PDVForm extends JFrame {
 	private DefaultTableModel tabModel = new DefaultTableModel();
 	private JTextField txValorTotal;
 	private JLabel descProduto;
+	private JComboBox cbForma;
 	
 	private Produto produtoSelecionado;
 	
@@ -48,16 +60,42 @@ public class PDVForm extends JFrame {
 
 	private ProdutosRepo produtosRepo = new ProdutosRepo();
 	private VendasRepo vendasRepo = new VendasRepo();
+	private JTextField txPreco;
 	
+
 	
+	protected void adicionarAvulso() {
+		Produto avulso = new Produto();
+		avulso.setNome(
+			!StringUtils.isBlank(txProduto.getText()) ?
+			txProduto.getText() : 		
+			ItemVenda.DES_ITEM_AVULSO
+		);
+		avulso.setPreco(
+			Double.valueOf(	
+				NumberUtil.removeFormat(
+					txPreco.getText()
+				)
+			)
+		);
+		produtoSelecionado = avulso;
+		
+		adicionarProduto();
+	}
 
 	protected void registrarVenda() {
 		venda.setDataVenda(new Date());
 	
+		if (cbForma.getSelectedIndex() > 0) {
+			String forma 			= cbForma.getSelectedItem().toString();
+			FormaPagamento formaPg	= new FormaRepo().findByForma(forma);
+			venda.setFormaPagto(formaPg);
+		} 		
 		vendasRepo.persistVenda(venda);
 		
 		JOptionPane.showMessageDialog(this,"Venda Registrada com Sucesso");
-		
+
+		cbForma.setSelectedIndex(0);
 		tabModel.setRowCount(0);
 		txValorTotal.setText("");
 		venda = new Venda();
@@ -70,6 +108,12 @@ public class PDVForm extends JFrame {
 		
 		if (produto != null) {
 			descProduto.setText(produto.getNome());
+			txPreco.setText(
+				FormatNumberUtil.format(
+					produto.getPreco(), 
+					FormatNumberUtil.DUAS_CASAS_DECIMAIS
+				)	
+			);
 			produtoSelecionado = produto;
 		} else {
 			descProduto.setText("");
@@ -115,6 +159,7 @@ public class PDVForm extends JFrame {
 		
 		descProduto.setText("");
 		txProduto.setText("");
+		txPreco.setText("");
 		txQtd.setText("1");
 	}
 	
@@ -143,7 +188,23 @@ public class PDVForm extends JFrame {
 	}
 
 	private void postConstruct() {
+		populateFormasPagto();
 		txQtd.setText("1");
+	}
+	
+	private void populateFormasPagto() {
+		cbForma.setModel(new DefaultComboBoxModel());
+		((DefaultComboBoxModel)(cbForma.getModel()))
+			.addElement("");
+		
+		List<FormaPagamento>formas = new FormaRepo().getAll();
+
+		for (FormaPagamento forma: formas) {
+			((DefaultComboBoxModel)(cbForma.getModel()))
+				.addElement(
+					forma.getForma()
+				);
+		}
 	}
 	
 	/**
@@ -192,7 +253,7 @@ public class PDVForm extends JFrame {
 		contentPane.add(lblQtd);
 		
 		txQtd = new JTextField();
-		txQtd.setBounds(89, 95, 135, 29);
+		txQtd.setBounds(89, 95, 91, 29);
 		contentPane.add(txQtd);
 		txQtd.setColumns(10);
 		
@@ -203,7 +264,7 @@ public class PDVForm extends JFrame {
 				adicionarProduto();
 			}
 		});
-		btnAdicionar.setBounds(236, 94, 239, 30);
+		btnAdicionar.setBounds(378, 94, 239, 30);
 		contentPane.add(btnAdicionar);
 		
 		JPanel panel = new JPanel();
@@ -252,8 +313,40 @@ public class PDVForm extends JFrame {
 		descProduto = new JLabel("");
 		descProduto.setBorder(new LineBorder(new Color(0, 0, 0)));
 		descProduto.setFont(new Font("Tahoma", Font.BOLD, 11));
-		descProduto.setBounds(89, 48, 575, 36);
+		descProduto.setBounds(89, 48, 758, 36);
 		contentPane.add(descProduto);
+		
+		JButton btnAdicionarProdutoAvulso = new JButton("Adicionar Produto Avulso");
+		btnAdicionarProdutoAvulso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				adicionarAvulso();
+			}
+		});
+		btnAdicionarProdutoAvulso.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnAdicionarProdutoAvulso.setBounds(627, 95, 220, 29);
+		contentPane.add(btnAdicionarProdutoAvulso);
+		
+		txPreco = new JTextField();
+		txPreco.setBounds(252, 95, 116, 29);
+		contentPane.add(txPreco);
+		txPreco.setColumns(10);
+		
+		JLabel lblPreo = new JLabel("Pre\u00E7o");
+		lblPreo.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPreo.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblPreo.setBounds(190, 102, 55, 14);
+		contentPane.add(lblPreo);
+		
+		JLabel lblFormaDePagamento = new JLabel("Forma de Pagamento");
+		lblFormaDePagamento.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblFormaDePagamento.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblFormaDePagamento.setBounds(12, 393, 168, 15);
+		contentPane.add(lblFormaDePagamento);
+		
+		cbForma = new JComboBox();
+		cbForma.setFont(new Font("Tahoma", Font.BOLD, 11));
+		cbForma.setBounds(190, 386, 220, 29);
+		contentPane.add(cbForma);
 	}
 
 	protected void showDlgVendas() {

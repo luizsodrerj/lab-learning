@@ -3,7 +3,7 @@ package persistence;
 import java.util.List;
 
 import framework.persistence.jpa.PersistenceServiceUtil;
-import pdv.Produto;
+import pdv.domain.Produto;
 
 public class ProdutosRepo {
 

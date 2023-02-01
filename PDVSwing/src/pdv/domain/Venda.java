@@ -1,4 +1,4 @@
-package pdv;
+package pdv.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,6 +30,11 @@ public class Venda implements Serializable {
 	
 	@OneToMany(mappedBy = "venda")
 	private List<ItemVenda>carrinho = new ArrayList<ItemVenda>();
+	
+	@ManyToOne
+	@JoinColumn(name = "id_forma_pagto")
+	private FormaPagamento formaPagto;
+	
 	
 	@Transient
 	private List<ItemVenda> itens = new ArrayList<>();
@@ -91,6 +98,14 @@ public class Venda implements Serializable {
 
 	public void setCarrinho(List<ItemVenda> carrinho) {
 		this.carrinho = carrinho;
+	}
+
+	public FormaPagamento getFormaPagto() {
+		return formaPagto;
+	}
+
+	public void setFormaPagto(FormaPagamento formaPagto) {
+		this.formaPagto = formaPagto;
 	}
 
 	

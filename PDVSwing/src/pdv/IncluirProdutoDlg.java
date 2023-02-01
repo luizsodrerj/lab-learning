@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import pdv.domain.Produto;
 import persistence.ProdutosRepo;
 
 public class IncluirProdutoDlg extends JDialog {

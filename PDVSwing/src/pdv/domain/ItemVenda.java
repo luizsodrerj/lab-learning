@@ -1,4 +1,4 @@
-package pdv;
+package pdv.domain;
 
 import java.io.Serializable;
 
@@ -15,6 +15,8 @@ public class ItemVenda implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	public static final String DES_ITEM_AVULSO = "Produto Avulso"; 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
@@ -43,7 +45,10 @@ public class ItemVenda implements Serializable {
 	public void copy(Produto produto) {
 		preco 		 = produto.getPreco();
 		nome 		 = produto.getNome();
-		this.produto = produto;
+		
+		if (produto.getId() != null) {
+			this.produto = produto;	
+		}
 	}
 	
 	public Double getPreco() {

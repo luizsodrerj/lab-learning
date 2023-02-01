@@ -65,7 +65,7 @@ public class MainFrame extends JFrame {
 	 */
 	public MainFrame() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 630, 385);
+		setBounds(100, 100, 701, 432);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -78,7 +78,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		btnIniciarVenda.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnIniciarVenda.setBounds(10, 11, 195, 47);
+		btnIniciarVenda.setBounds(10, 11, 239, 47);
 		contentPane.add(btnIniciarVenda);
 		
 		JButton btCadProdutos = new JButton("Cadastro de Produtos");
@@ -88,7 +88,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		btCadProdutos.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btCadProdutos.setBounds(215, 11, 189, 47);
+		btCadProdutos.setBounds(10, 185, 239, 47);
 		contentPane.add(btCadProdutos);
 		
 		JButton btnRelatrioDeVendas = new JButton("Relat\u00F3rio de Vendas");
@@ -98,15 +98,16 @@ public class MainFrame extends JFrame {
 			}
 		});
 		btnRelatrioDeVendas.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnRelatrioDeVendas.setBounds(414, 11, 189, 47);
+		btnRelatrioDeVendas.setBounds(10, 69, 239, 47);
 		contentPane.add(btnRelatrioDeVendas);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 69, 594, 2);
+		separator.setOrientation(SwingConstants.VERTICAL);
+		separator.setBounds(259, 11, 7, 371);
 		contentPane.add(separator);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 82, 593, 253);
+		panel.setBounds(276, 11, 396, 253);
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -115,6 +116,33 @@ public class MainFrame extends JFrame {
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setIcon(new ImageIcon(MainFrame.class.getResource("/resources/img/car.png")));
 		panel.add(lblNewLabel, BorderLayout.CENTER);
+		
+		JButton btCadFormaPg = new JButton("Cadastro de Forma de Pagamento");
+		btCadFormaPg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FormaPagtoDlg formaPgDlg = new FormaPagtoDlg(true);
+				formaPgDlg.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				Window.centralizeWindow(formaPgDlg);
+				formaPgDlg.setModal(true);
+				formaPgDlg.setVisible(true);
+			}
+		});
+		btCadFormaPg.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btCadFormaPg.setBounds(10, 243, 239, 47);
+		contentPane.add(btCadFormaPg);
+		
+		JButton btRelatorioConsolidado = new JButton("Relat\u00F3rio Consolidado de Vendas");
+		btRelatorioConsolidado.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				VendasConsolidadasDlg dialog = new VendasConsolidadasDlg(true);
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				Window.centralizeWindow(dialog);
+				dialog.setModal(true);
+				dialog.setVisible(true);
+			}
+		});
+		btRelatorioConsolidado.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btRelatorioConsolidado.setBounds(10, 127, 239, 47);
+		contentPane.add(btRelatorioConsolidado);
 	}
-
 }

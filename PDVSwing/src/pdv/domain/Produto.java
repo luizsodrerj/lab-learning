@@ -1,4 +1,4 @@
-package pdv;
+package pdv.domain;
 
 import java.io.Serializable;
 

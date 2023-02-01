@@ -14,6 +14,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import framework.presentation.swing.Window;
+import pdv.domain.Produto;
 import persistence.ProdutosRepo;
 import java.awt.Font;
 

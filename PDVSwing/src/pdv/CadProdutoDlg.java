@@ -13,6 +13,7 @@ import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 
 import framework.presentation.swing.Window;
+import pdv.domain.Produto;
 import persistence.ProdutosRepo;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;

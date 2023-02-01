@@ -12,6 +12,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,6 +27,7 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
@@ -30,11 +35,11 @@ import framework.presentation.swing.Calendar;
 import framework.presentation.swing.Window;
 import framework.util.DateUtil;
 import framework.util.FormatNumberUtil;
+import pdv.domain.FormaPagamento;
+import pdv.domain.ItemVenda;
+import pdv.domain.Venda;
 import persistence.VendasRepo;
-import javax.swing.JButton;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
+import util.CalendarUtil;
 
 public class VendasDlg extends JDialog {
 
@@ -66,36 +71,54 @@ public class VendasDlg extends JDialog {
 		
 		configTabVendas();
 		confTabCarrinho();
-		preencherVendas();
+		populateVendas();
 		
 		setModal(modal);
 	}
 
 	public void pesquisar() {
 		try {
-			List<Venda>vendas = null;
-			
-			if (this.mes.getSelectedIndex() > 0 &&
-				this.ano.getSelectedIndex() > 0) {
-				int mes = this.mes.getSelectedIndex();
-				int ano = Integer.parseInt(
-						    this.ano.getModel().getElementAt(
-						      this.ano.getSelectedIndex()
-						    ).toString()
-						  );
-				vendas = repository.findByMesAno(mes, ano);
-			} else {
-				Date ini = DateUtil.parse(txDtIni.getText(), DateUtil.dd_MM_yyyy);
-				Date fim = DateUtil.parse(txDtFim.getText(), DateUtil.dd_MM_yyyy);
-				vendas = repository.findByPeriodo(ini, fim);
-			}
+			List<Venda>vendas = this.mes.getSelectedIndex() > 0 && 
+								this.ano.getSelectedIndex() > 0 ?
+								getByMesAno() :
+								getByPeriodo();
+
 			populateVendas(vendas);
 			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}
+
+	private List<Venda> getByPeriodo() throws ParseException {
+		Date ini = DateUtil.parse(txDtIni.getText(), DateUtil.dd_MM_yyyy);
+		Date fim = DateUtil.parse(txDtFim.getText(), DateUtil.dd_MM_yyyy);
+		
+		return repository.findByPeriodo(ini, fim);
+	}
+
+	private List<Venda> getByMesAno() {
+		int mes = this.mes.getSelectedIndex();
+		int ano = Integer.parseInt(
+				    this.ano.getModel().getElementAt(
+				      this.ano.getSelectedIndex()
+				    ).toString()
+				  );
+		
+		return repository.findByMesAno(mes, ano);
+	}
 	
+	public void resetFields() {
+		txValorTotal.setText("");
+		txDtIni.setText("");
+		txDtFim.setText("");
+		
+		mes.setSelectedIndex(0);
+		ano.setSelectedIndex(0);
+		
+		carrinhoModel.setRowCount(0);
+		vendasModel.setRowCount(0);
+	}
 	
 	private void init() {
 		addBtListener(btCalIni, txDtIni);
@@ -112,18 +135,12 @@ public class VendasDlg extends JDialog {
 		
 		cbAno.addElement("");
 		cbMes.addElement("");
-		cbMes.addElement("Janeiro");
-		cbMes.addElement("Fevereiro");
-		cbMes.addElement("Mar\u00E7o");
-		cbMes.addElement("Abril");
-		cbMes.addElement("Maio");
-        cbMes.addElement("Junho");
-        cbMes.addElement("Julho");
-        cbMes.addElement("Agosto");
-        cbMes.addElement("Setembro");
-        cbMes.addElement("Outubro");
-        cbMes.addElement("Novembro");
-        cbMes.addElement("Dezembro");
+		
+		String[] meses = CalendarUtil.getMonthNames();
+		
+		for (String mes: meses) {
+			cbMes.addElement(mes);
+		}
 		
         int anoAtual = new DateUtil().getYear();
         int anoMin 	 = 1980;
@@ -155,10 +172,13 @@ public class VendasDlg extends JDialog {
 		carrinhoModel.addColumn("Qtd.");
 		carrinhoModel.addColumn("Valor Total");
 		
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+		renderer.setHorizontalAlignment(JLabel.RIGHT);
 		TableColumnModel columnModel = tabCarrinho.getColumnModel();
-		columnModel.getColumn(0).setPreferredWidth(470);
+		columnModel.getColumn(0).setPreferredWidth(483);
 		columnModel.getColumn(1).setPreferredWidth(100);
-		columnModel.getColumn(1).setPreferredWidth(220);
+		columnModel.getColumn(2).setCellRenderer(renderer);
+		columnModel.getColumn(2).setPreferredWidth(180);
 	}
 
 	private void configTabVendas() {
@@ -174,10 +194,16 @@ public class VendasDlg extends JDialog {
 		);
 		vendasModel.addColumn("Id");
 		vendasModel.addColumn("Data");
+		vendasModel.addColumn("Forma Pagto.");
 		
 		TableColumnModel columnModel = tabVendas.getColumnModel();
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+		
 		columnModel.getColumn(0).setPreferredWidth(110);
-		columnModel.getColumn(1).setPreferredWidth(315);
+		columnModel.getColumn(1).setCellRenderer(centerRenderer);
+		columnModel.getColumn(1).setPreferredWidth(215);
+		columnModel.getColumn(2).setPreferredWidth(400);
 	}
 	
 	protected void vendasRowSelection() {
@@ -217,7 +243,7 @@ public class VendasDlg extends JDialog {
 		);
 	}
 
-	private void preencherVendas() {
+	private void populateVendas() {
 		List<Venda> vendas = repository.getVendas(); 
 		
 		populateVendas(vendas);
@@ -233,6 +259,11 @@ public class VendasDlg extends JDialog {
 			dados.add(
 			  new SimpleDateFormat("dd/MM/yyyy")
 			      .format(venda.getDataVenda())
+			);
+			dados.add(
+				venda.getFormaPagto() != null ?
+				venda.getFormaPagto().getForma() :
+				FormaPagamento.NAO_INFORMADA	
 			);
 			vendasModel.addRow(dados);
 		}
@@ -320,7 +351,7 @@ public class VendasDlg extends JDialog {
 			}
 		});
 		btnPesquisar.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnPesquisar.setBounds(669, 12, 125, 39);
+		btnPesquisar.setBounds(652, 12, 142, 39);
 		getContentPane().add(btnPesquisar);
 		
 		lblPesquisaPorMsano = new JLabel("Pesquisa por M\u00EAs/Ano");
@@ -344,6 +375,16 @@ public class VendasDlg extends JDialog {
 		ano.setFont(new Font("Tahoma", Font.BOLD, 11));
 		ano.setBounds(346, 108, 82, 26);
 		getContentPane().add(ano);
+		
+		JButton btnLimparCampos = new JButton("Limpar Campos");
+		btnLimparCampos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				resetFields();
+			}
+		});
+		btnLimparCampos.setFont(new Font("Tahoma", Font.BOLD, 11));
+		btnLimparCampos.setBounds(652, 62, 142, 35);
+		getContentPane().add(btnLimparCampos);
 	}
 
 	/**
