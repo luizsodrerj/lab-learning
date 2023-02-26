@@ -40,6 +40,7 @@ import pdv.domain.Venda;
 import persistence.FormaRepo;
 import persistence.ProdutosRepo;
 import persistence.VendasRepo;
+import swingcomponents.MonetaryDocument;
 
 public class PDVForm extends JFrame {
 
@@ -190,6 +191,8 @@ public class PDVForm extends JFrame {
 	private void postConstruct() {
 		populateFormasPagto();
 		txQtd.setText("1");
+		
+		txPreco.setDocument(new MonetaryDocument());
 	}
 	
 	private void populateFormasPagto() {
@@ -327,6 +330,7 @@ public class PDVForm extends JFrame {
 		contentPane.add(btnAdicionarProdutoAvulso);
 		
 		txPreco = new JTextField();
+		txPreco.setHorizontalAlignment(SwingConstants.RIGHT);
 		txPreco.setBounds(252, 95, 116, 29);
 		contentPane.add(txPreco);
 		txPreco.setColumns(10);

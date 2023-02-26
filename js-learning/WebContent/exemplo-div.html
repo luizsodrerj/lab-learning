@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" http-equiv="Content-Language" content="pt-br">
+<title>Javascript</title>
+</head>
+<body>
+	<script type="text/javascript">
+        function mudarCorDaDiv() {
+            document.getElementById('div1').style.backgroundColor = 'aqua' 
+            document.getElementById('div2').style.backgroundColor = 'aqua'            
+        }
+	</script>
+
+    <style>
+        .formatacaoDiv {
+            margin-top: 75px; 
+            margin-left: 245px; 
+            background-color: aquamarine; 
+            width: 40%;
+        }
+
+        .botao {
+            margin-left: 320px; 
+            margin-top: 22px;
+        }
+    </style>
+
+    <input 
+        type="button" 
+        onclick="mudarCorDaDiv()"
+        value="Mudar cor da DIV 1" 
+        class="botao">
+
+    <input 
+        type="button" 
+        onclick="document.getElementById('div2').style.backgroundColor = 'bisque'"
+        value="Mudar cor da DIV 2"
+        style="margin-left: 15px;">
+
+    <div id="div1" class="formatacaoDiv">
+        Exemplo de painel DIV
+    </div>
+
+    <div id="div2" class="formatacaoDiv">
+        Outra DIV
+    </div>
+
+</body>
+</html>

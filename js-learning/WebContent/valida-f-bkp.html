@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" http-equiv="Content-Language" content="pt-br">
+    <title>Javascript</title>
+</head>
+<body>
+    <style>
+        .divBemVindo {
+            background-color:bisque; 
+            visibility: hidden;
+            margin-top: 25px; 
+            height: 55px;            
+            width: 27%; 
+        }
+    </style>
+    <script type="text/javascript">
+
+        var loginValidoBeto = 'beto'
+        var senhaValidaBeto = '1234'
+        var nomeBeto = 'Beto Careca'
+
+        var loginValidoJu = 'julio'
+        var senhaValidaJu = '9999'
+        var nomeJulio = 'Julio Cesar'
+
+        function validarLogin() {
+            var login = document.getElementById('login')
+            var senha = document.getElementById('senha')
+            var div = document.getElementById('div')
+            var tab = document.getElementById('tabLogin')
+
+            if (login.value == loginValidoBeto && senha.value == senhaValidaBeto) {
+                div.style.visibility = 'visible'
+                tab.style.visibility = 'hidden'
+                div.innerHTML = 'Bem vindo ao Roblox '+ nomeBeto
+            } else if (login.value == loginValidoJu && senha.value == senhaValidaJu) {
+                div.style.visibility = 'visible'
+                tab.style.visibility = 'hidden'
+                div.innerHTML = 'Bem vindo ao Roblox '+ nomeJulio
+            } else {
+                alert(`Login ou senha inválidos!`)
+            }
+        }
+
+    </script>
+    <form>
+      <div style="margin-top: 45px; margin-left: 150px;">
+
+        <table id="tabLogin">
+            <tr>
+                <td>Login</td>
+                <td>
+                    <input type="text" id="login">
+                </td>
+            </tr>
+            <tr>
+                <td>Senha</td>
+                <td>
+                    <input type="password" id="senha">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input 
+                        onclick="validarLogin()"
+                        value="Logar"
+                        type="button">
+                </td>
+            </tr>
+        </table> 
+
+        <div id="div" class="divBemVindo">
+            Seja bem-vindo ao Roblox Julio Cesar
+        </div>
+
+      </div>
+    </form>
+</body>

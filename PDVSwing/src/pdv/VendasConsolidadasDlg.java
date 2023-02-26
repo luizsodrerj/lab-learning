@@ -1,9 +1,15 @@
 package pdv;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -11,31 +17,41 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import javax.swing.text.MaskFormatter;
 
 import framework.presentation.swing.Calendar;
 import framework.presentation.swing.Window;
 import framework.util.DateUtil;
+import framework.util.FormatNumberUtil;
+import pdv.domain.TotalVendasAno;
+import pdv.domain.TotalVendasMesAno;
+import pdv.domain.TotalVendasPorData;
+import persistence.VendasRepo;
 import util.CalendarUtil;
-
-import javax.swing.event.ChangeEvent;
-import javax.swing.JSeparator;
-import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 public class VendasConsolidadasDlg extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int PESQ_POR_MES_ANO	= 1;
+	private static final int PESQ_POR_PERIODO 	= 2;
+	private static final int PESQ_POR_DATA 		= 3;
+	private static final int PESQ_POR_ANO 		= 4;
+	
 	private DefaultTableModel tabModel = new DefaultTableModel();
 	
 	private ButtonGroup grupo = new ButtonGroup();
@@ -50,27 +66,182 @@ public class VendasConsolidadasDlg extends JDialog {
 	private JButton btFim;
 	private JTextField dtFim;
 	private JComboBox cbVendasAno;
-	JComboBox cbMes;
-	JComboBox cbAno;
+	private JComboBox cbMes;
+	private JComboBox cbAno;
 	private JTextField txDia;
 	private JButton btDia;
 	private JTable tabVendas;
 
+	private VendasRepo vendasRepo = new VendasRepo();
+	
+	private int tipoPesquisa = 0;
+	
+
+	void pesquisar() {
+		switch (tipoPesquisa) {
+			case PESQ_POR_MES_ANO:
+				pesquisaPorMesAno();
+				break;
+			case PESQ_POR_PERIODO:
+				pesquisaPorPeriodo();
+				break;
+			case PESQ_POR_DATA:
+				pesquisaPorData();
+				break;
+			case PESQ_POR_ANO:
+				pesquisaPorAno();
+				break;
+			default:
+				throw new IllegalArgumentException(
+					"Tipo de Pesquisa Invalida!"
+				);
+		}
+	}
+	
+	private void pesquisaPorAno() {
+		if (cbVendasAno.getSelectedIndex() > 0) {
+			List<TotalVendasAno>result = vendasRepo.getConsolidadoByAno(
+						Integer.parseInt(
+							cbVendasAno.getSelectedItem().toString()
+						)
+					);
+			tabModel.setRowCount(0);
+			
+			for (TotalVendasAno totalVendasAno : result) {
+				Vector<String>dados = new Vector<String>();
+				dados.add(totalVendasAno.getAno().toString());
+				dados.add(
+					FormatNumberUtil.format(
+						totalVendasAno.getValorTotal(), 
+						FormatNumberUtil.DUAS_CASAS_DECIMAIS
+					)	
+				);
+				tabModel.addRow(dados);
+			}
+		}
+	}
+
+	private void pesquisaPorData() {
+		Date data = null;
+		try {
+			data = DateUtil.parse(txDia.getText(), DateUtil.dd_MM_yyyy);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		List<TotalVendasPorData>result = vendasRepo.getConsolidadoByData(data);
+		populateVendasPorData(result);
+	}
+
+	private void pesquisaPorPeriodo() {
+		Date ini = null;
+		Date fim = null;
+		try {
+			ini = DateUtil.parse(dtIni.getText(), DateUtil.dd_MM_yyyy);
+			fim = DateUtil.parse(dtFim.getText(), DateUtil.dd_MM_yyyy);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		List<TotalVendasPorData>result = vendasRepo.getConsolidadoByPeriodo(ini,fim);
+		populateVendasPorData(result);
+	}
+
+	private void pesquisaPorMesAno() {
+		if (cbAno.getSelectedIndex() > 0 &&
+			cbMes.getSelectedIndex() > 0) {
+			int ano = Integer.parseInt(cbAno.getSelectedItem().toString());
+			int mes = cbMes.getSelectedIndex();
+			
+			List<TotalVendasMesAno>result = vendasRepo.getConsolidadoByMesAno(mes,ano);
+			tabModel.setRowCount(0);
+			
+			for (TotalVendasMesAno vendas : result) {
+				Vector<String>dados = new Vector<String>();
+				Date date = null; 
+				try {
+					date = DateUtil.parse(vendas.getAnoMes(),DateUtil.yyyyMM);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}	
+				dados.add(DateUtil.format(date,DateUtil.MM_yyyy));
+				dados.add(
+					FormatNumberUtil.format(
+						vendas.getValorTotal(), 
+						FormatNumberUtil.DUAS_CASAS_DECIMAIS
+					)	
+				);
+				tabModel.addRow(dados);
+			}
+		}
+	}
+
+	private void populateVendasPorData(List<TotalVendasPorData> result) {
+		tabModel.setRowCount(0);
+		
+		BigDecimal totalGeral = new BigDecimal(0);
+		
+		for (TotalVendasPorData vendas : result) {
+			Vector<String>dados = new Vector<String>();
+			dados.add(
+				DateUtil.format(
+					vendas.getDataVenda(), 
+					DateUtil.dd_MM_yyyy
+				)	
+			);
+			dados.add(
+				FormatNumberUtil.format(
+					vendas.getValorTotal(), 
+					FormatNumberUtil.DUAS_CASAS_DECIMAIS
+				)	
+			);
+			tabModel.addRow(dados);
+			totalGeral = totalGeral.add(
+				new BigDecimal(vendas.getValorTotal())
+			);
+		}
+		if (result.size() > 1) {
+			Vector<String>dados = new Vector<String>();
+			dados.add("");
+			dados.add(
+				"TOTAL  -     " + 	
+				FormatNumberUtil.format(
+					totalGeral, 
+					FormatNumberUtil.DUAS_CASAS_DECIMAIS
+				)	
+			);
+			tabModel.addRow(dados);
+		}
+	}
 	
 	void vendasPorMsanoStateChanged(ChangeEvent e) {
-		hidePanels(true, false, false, false, e);	
+		hidePanels(true, false, false, false, e);
+		
+		if (((JRadioButton)e.getSource()).isSelected()) {
+			tipoPesquisa = PESQ_POR_MES_ANO;
+		}
 	}
 	
 	void vendasPorPeriodoStateChanged(ChangeEvent e) {
 		hidePanels(false, true, false, false, e);
+		
+		if (((JRadioButton)e.getSource()).isSelected()) {
+			tipoPesquisa = PESQ_POR_PERIODO;
+		}
 	}
 
 	void vendasPorAnoStateChanged(ChangeEvent e) {
 		hidePanels(false, false, true, false, e);
+		
+		if (((JRadioButton)e.getSource()).isSelected()) {
+			tipoPesquisa = PESQ_POR_ANO;
+		}
 	}
 
 	void vendasPorDiaStateChanged(ChangeEvent e) {
 		hidePanels(false, false, false, true, e);
+		
+		if (((JRadioButton)e.getSource()).isSelected()) {
+			tipoPesquisa = PESQ_POR_DATA;
+		}
 	}
 
 	void hidePanels(
@@ -226,6 +397,11 @@ public class VendasConsolidadasDlg extends JDialog {
 		grupo.add(rdbtnVendasPorDia);
 		
 		JButton btPesquisar = new JButton("Pesquisar");
+		btPesquisar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pesquisar();
+			}
+		});
 		btPesquisar.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btPesquisar.setBounds(726, 7, 169, 39);
 		getContentPane().add(btPesquisar);
@@ -269,7 +445,11 @@ public class VendasConsolidadasDlg extends JDialog {
 		lblDataInicial.setBounds(0, 6, 78, 14);
 		pnlPeriodo.add(lblDataInicial);
 		
-		dtIni = new JTextField();
+		try {
+			dtIni = new JFormattedTextField(new MaskFormatter("##/##/####"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		dtIni.setBounds(88, 0, 86, 26);
 		pnlPeriodo.add(dtIni);
 		dtIni.setColumns(10);
@@ -290,7 +470,11 @@ public class VendasConsolidadasDlg extends JDialog {
 		btFim.setBounds(456, 2, 89, 68);
 		pnlPeriodo.add(btFim);
 		
-		dtFim = new JTextField();
+		try {
+			dtFim = new JFormattedTextField(new MaskFormatter("##/##/####"));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		dtFim.setColumns(10);
 		dtFim.setBounds(360, 3, 86, 26);
 		pnlPeriodo.add(dtFim);
@@ -312,7 +496,11 @@ public class VendasConsolidadasDlg extends JDialog {
 		pnlDia.setBounds(156, 163, 560, 70);
 		getContentPane().add(pnlDia);
 		
-		txDia = new JTextField();
+		try {
+			txDia = new JFormattedTextField(new MaskFormatter("##/##/####"));
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
 		txDia.setColumns(10);
 		txDia.setBounds(10, 0, 89, 26);
 		pnlDia.add(txDia);
@@ -338,7 +526,7 @@ public class VendasConsolidadasDlg extends JDialog {
 		scrollPane.setViewportView(tabVendas);
 
 	}
-	
+
 	/**
 	 * Launch the application.
 	 */
