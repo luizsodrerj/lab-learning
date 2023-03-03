@@ -1,8 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import $ from 'jquery' 
-
 import Brincdou   from './assets/img/portfolio/brinc-dou.jpeg'
 import Colarolhogreg from './assets/img/portfolio/colar-olhogreg.jpeg'
 import Divbijus   from './assets/img/portfolio/div-bijus.jpeg'

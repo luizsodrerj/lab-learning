@@ -8,6 +8,9 @@ import Pulseira3pinprata from './assets/img/portfolio/pulseira-3-pin-prata.PNG'
 import Relogiocobre from './assets/img/portfolio/relogio-cobre.PNG'
 import Relogiodourado from './assets/img/portfolio/relogio-dourado.PNG'
 
+import Caroussel from './Caroussel'
+
+
 const portfolioImages = [{
     photo: BorboDourada,
     dataBsTarget: "#portfolioModal1",
@@ -64,8 +67,14 @@ function PortfolioSection() {
               </div>
             )}
         </div>
-      </div>
-    </section>
+      </div> 
+	  <div className="row" style={{marginTop: "25px"}}>
+		<div className="col-lg-3"></div>
+			<div className="col-lg-6">
+				<Caroussel></Caroussel>
+			</div>	
+	  	</div>
+    </section> 
   )
 }
 
