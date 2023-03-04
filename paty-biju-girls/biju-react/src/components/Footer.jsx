@@ -18,20 +18,17 @@ export default () =>
                     </div>
                     <div className="col-lg-4 mb-5 mb-lg-0">
                         <h4 className="text-uppercase mb-4">Contatos e Redes Sociais</h4>
-                        <a className="btn btn-outline-light btn-social mx-1" href="#!">
+                        <a className="btn btn-outline-light btn-social mx-1" href="https://www.facebook.com/patriciacarvalho.dasilva.73">
                         	<i className="fab fa-fw fa-facebook-f"></i>
                         </a>
-                        <a className="btn btn-outline-light btn-social mx-1" href="#!">
-                        	<i className="fab fa-fw fa-whatsapp"></i>
-                        </a>
-                        <a className="btn btn-outline-light btn-social mx-1" href="#!">
+                        <a className="btn btn-outline-light btn-social mx-1" href="https://www.instagram.com/bijus_girls22">
                         	<i className="fab fa-fw fa-instagram"></i>
                         </a>
-                        <a className="btn btn-outline-light btn-social mx-1" href="#!">
+                        <a className="btn btn-outline-light btn-social mx-1" href="mailto:patybijugirl@gmail.com">
                         	<i className="fab fa-fw fa-google"></i>
                         </a>
-                        <a className="btn btn-outline-light btn-social mx-1" href="#!">
-                        	<i className="fab fa-fw fa-twitter"></i>
+                        <a className="btn btn-outline-light btn-social mx-1" href="https://whatsapp.com">
+                        	<i className="fab fa-fw fa-whatsapp"></i>
                         </a>
                     </div>
                     <div className="col-lg-4">
