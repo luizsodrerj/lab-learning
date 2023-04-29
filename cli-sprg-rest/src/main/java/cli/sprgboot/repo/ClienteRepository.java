@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import cli.sprgboot.entity.Cliente;
 
-//@Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
 	Optional<Cliente> findById(Integer id);

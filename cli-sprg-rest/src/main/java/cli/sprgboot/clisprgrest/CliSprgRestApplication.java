@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import cli.sprgboot.entity.Cliente;
@@ -12,6 +13,7 @@ import cli.sprgboot.repo.ClienteRepository;
 
 @SpringBootApplication
 @EnableJpaRepositories("cli.sprgboot.repo")
+@ComponentScan(basePackages="cli.sprgboot.controller") 
 @EntityScan("cli.sprgboot.entity")
 public class CliSprgRestApplication {
 
