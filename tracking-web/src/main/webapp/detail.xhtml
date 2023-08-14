@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+<h:head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Tracking</title>
+</h:head> 
+<body> 
+  <h:form>
+   	 <div style="margin-top:25px; margin-left:140px; width:550px;">
+   		<br/>
+
+		<p:commandButton 
+			action="#{trackBean.onClickBtSalvar()}"
+			style="width: 160px;"
+			value="Salvar" 
+			ajax="false"/>
+
+		<p:spacer width="35"/>
+
+		<p:commandButton 
+			action="/index.xhtml"
+			value="Voltar" 
+			ajax="false"/>
+
+   		<br/>
+
+		<p:panelGrid columns="2" style="margin-top: 12px;"> 
+	        <h:outputText value="Data" />
+	        <p:calendar
+	        	value="#{trackBean.data}"
+	        	pattern="dd/MM/yyyy"
+	        	showOn="button"
+	        	id="data"/>
+
+			<h:outputText value=" " />
+	        <p:inputTextarea 
+	        	value="#{trackBean.detalhe}"
+	        	cols="65"
+	        	rows="22" 
+	        	id="det"/>
+		</p:panelGrid>
+	
+   
+   	 </div>
+  </h:form>
+</body> 
+</html>
+
+
+
+
+

@@ -1,0 +1,66 @@
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Tracking</title>
+
+  <!-- CSS  -->
+  <link href="#{request.contextPath}/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="#{request.contextPath}/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</h:head>
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container">
+    	<a id="logo-container" href="#" class="brand-logo">
+    		Time Tracking
+    	</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#">Time Tracking</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="#">Navbar Link</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br/><br/>
+      <h3 class="header center blue-text">Rastreio de Horas Trabalhadas e Tarefas</h3>
+      <div class="row center">
+        <h5 class="header col s12 light">
+        	Clique no botao abaixo para iniciar
+        </h5>
+      </div>
+      <div class="row center">
+        <h:form>
+	        <h:commandLink 
+	        	action="#{trackBean.listTrackings()}"
+	        	styleClass="btn-large waves-effect waves-light red" 
+	        	value="Prosseguir" />
+        </h:form>	
+      </div>
+    </div>
+  </div>
+
+
+  <!--  Scripts-->
+  <script src="js/jquery-2.2.4.min.js"></script>
+  <script src="js/materialize.min.js"></script>
+  <script src="js/init.js"></script>
+
+  </body>
+</html>
+
+
+
+
+
+
+
+
