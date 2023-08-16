@@ -29,16 +29,35 @@ public class TrackBean {
 		
 		return "/index.xhtml";
 	}
+
+	public String onClickBtDelete() {
+		Integer id  = getParamId();
+		TimeTrk trk = service.getById(id);
+
+		service.remove(trk);
+		
+		return listTrackings();
+	}
+ 
 	
 	public String onClickIdLink() {
-		FacesContext f 	= FacesContext.getCurrentInstance();
-		Integer id 	   	= Integer.valueOf(((HttpServletRequest)f.getExternalContext().getRequest()).getParameter("id"));
+		Integer id = getParamId();
 		TimeTrk trk    	= service.getById(id);
 		
 		detalhe = trk.getDetalhe();
 		data	= trk.getData();
 		
 		return "/detail.xhtml";
+	}
+
+	private Integer getParamId() {
+		FacesContext f = FacesContext.getCurrentInstance();
+		
+		return Integer.valueOf(
+				((HttpServletRequest)f.getExternalContext()
+									  .getRequest())
+									  .getParameter("id")
+				);
 	}
 	
 	public String listTrackings() {

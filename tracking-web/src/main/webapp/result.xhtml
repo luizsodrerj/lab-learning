@@ -41,18 +41,17 @@
        
    		<br/><br/>
    		
-   		<p:commandButton 
-			action="/detail.xhtml"
-			value="Nova Atividade" 
-			styleClass="bt"
-			ajax="false"/>
+        <h:commandLink 
+        	action="/detail.xhtml"
+        	styleClass="btn-large waves-effect waves-light black" 
+        	value="Nova Atividade" />
 			
    		<br/><br/>
    		
 		<p:dataTable var="track" value="#{trackBean.list}">
 			<p:column headerText="Id" width="85">
 		        <h:commandLink 
-		        	action="#{trackBean.onClickIdLink()}" 
+		        	action="#{trackBean.onClickIdLink}" 
 		        	value="#{track.id}">
 		        	<f:param name="id" value="#{track.id}"/>
 		        </h:commandLink>	
@@ -62,6 +61,17 @@
 		        	<f:convertDateTime pattern="dd/MM/yyyy" />
 		        </h:outputText>
 		    </p:column>
+			<p:column headerText="#" width="120" style="text-align: center;">
+		        <h:commandLink 
+		        	styleClass="btn-large waves-effect waves-light red"
+		        	action="#{trackBean.onClickBtDelete}" 
+		        	value="Remover">
+					<f:param 
+						value="#{track.id}"
+						name="id"/>		        	
+		        </h:commandLink>
+		    </p:column>			
+		    
 		</p:dataTable>
    	 </div>
 

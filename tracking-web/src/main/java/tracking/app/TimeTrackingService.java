@@ -28,6 +28,19 @@ public class TimeTrackingService {
 		}
 	}
 
+	public void remove(TimeTrk track) {
+		try {
+			persistence.beginTransaction();
+			
+			track = persistence.findObject(TimeTrk.class, track.getId());
+			
+			persistence.remove(track);
+			persistence.commit();
+		} finally {
+			persistence.close();
+		}
+	}
+	
 	public List<TimeTrk> getAll() {
 		try {
 			return persistence.findAll(TimeTrk.class, null);
