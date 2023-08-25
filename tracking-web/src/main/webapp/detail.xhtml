@@ -8,46 +8,57 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
   <title>Tracking</title>
+  
+  <link href="#{request.contextPath}/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="#{request.contextPath}/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </h:head> 
 <body> 
+  <style>
+  	input[type="text"] {
+  		width: 33% !important;
+  	}
+  </style>	
+
   <h:form>
    	 <div style="margin-top:25px; margin-left:140px; width:550px;">
    		<br/>
 
-		<p:commandButton 
-			action="#{trackBean.onClickBtSalvar}"
-			style="width: 160px;"
-			value="Salvar" 
-			ajax="false"/>
+        <h:commandLink 
+        	action="#{trackBean.onClickBtSalvar}"
+        	styleClass="btn-large waves-effect waves-light blue" 
+        	value="Salvar" />
 
 		<p:spacer width="35"/>
 
-		<p:commandButton 
-			action="/index.xhtml"
-			value="Voltar" 
-			ajax="false"/>
+        <h:commandLink 
+        	action="/index.xhtml"
+        	styleClass="btn-large waves-effect waves-light blue" 
+        	value="Voltar" />
 
    		<br/>
 
-		<p:panelGrid columns="2" style="margin-top: 12px;"> 
-	        <h:outputText value="Data" />
+		<p:panelGrid columns="1" style="margin-top: 12px;"> 
 	        <p:calendar
+	        	style="width: 30%;"
 	        	value="#{trackBean.data}"
 	        	pattern="dd/MM/yyyy"
 	        	showOn="button"
 	        	id="data"/>
 
-			<h:outputText value=" " />
 	        <p:inputTextarea 
 	        	value="#{trackBean.detalhe}"
 	        	cols="65"
-	        	rows="22" 
+	        	rows="17" 
 	        	id="det"/>
 		</p:panelGrid>
 	
    
    	 </div>
   </h:form>
+  
+  <script src="js/materialize.min.js"></script>
+  <script src="js/init.js"></script>
+  
 </body> 
 </html>
 
