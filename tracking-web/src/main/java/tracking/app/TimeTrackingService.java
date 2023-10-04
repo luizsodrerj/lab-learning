@@ -41,6 +41,19 @@ public class TimeTrackingService {
 		}
 	}
 	
+	public List<TimeTrk> getAllOrderByDate() {
+		try {
+			return persistence.findByQuery(
+						"SELECT t FROM TimeTrk t " + 
+						"ORDER BY data desc", 
+						null
+					);
+		} finally {
+			persistence.close();
+		}
+	}
+	
+	
 	public List<TimeTrk> getAll() {
 		try {
 			return persistence.findAll(TimeTrk.class, null);
@@ -51,3 +64,12 @@ public class TimeTrackingService {
 	}
 	
 }
+
+
+
+
+
+
+
+
+

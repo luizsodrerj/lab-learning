@@ -42,13 +42,13 @@
    		<br/><br/>
    		
         <h:commandLink 
-        	action="/detail.xhtml"
+        	action="#{trackBean.onClickBtNovaAtividade}"
         	styleClass="btn-large waves-effect waves-light black" 
         	value="Nova Atividade" />
 			
    		<br/><br/>
    		
-		<p:dataTable var="track" value="#{trackBean.list}">
+		<p:dataTable var="track" value="#{trackBean.list}" scrollable="true" scrollHeight="380">
 			<p:column headerText="Id" width="85">
 		        <h:commandLink 
 		        	action="#{trackBean.onClickIdLink}" 
