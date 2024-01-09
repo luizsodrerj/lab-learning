@@ -1,6 +1,6 @@
 
 
-git commit -m "Implementação add admin Biju"
+git commit -m "Implementação da app admin Biju"
 	
 
 		<script type="text/javascript">
