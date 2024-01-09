@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+<h:head>
+	<ui:include src="../../header.xhtml"/>
+</h:head>
+<body id="page-top"> 
+	<ui:include src="../../nav.xhtml"/>
+	<h:form id="form">
+
+		<f:loadBundle var="msg" basename="messages"/>
+		
+		<script type="text/javascript">
+		/* <![CDATA[ */
+			function validateCategoria() {
+				nome = jQuery('[id*=nomeCategoria]').val()
+				
+				if (jQuery.trim(nome) == '') {
+					PF('msgPanel').show()
+					return false;	
+				} 
+				return true;
+			}
+		/*]]>*/
+		</script>
+
+		<p:dialog header="#{msg['msg.atencao']}!" id="msgPanel" widgetVar="msgPanel" minHeight="40" width="450" showEffect="fade">
+			<p class="m-0">
+				#{msg['msg.obrigatorio']} informar o Nome da Categoria
+			</p>
+		</p:dialog>
+		
+	    <header class="masthead bg-white text-black text-left">
+	        <div class="container d-flex align-items-center flex-column">
+	            <p class="masthead-subheading font-weight-light mb-0" style="margin-top: 8px;">
+	                <h3>Cadastro de Categoria</h3>
+	            </p>
+	            
+				<div class="mb-3">
+				    <label for="nomeCategoria" class="form-label">
+				    	Nome da Categoria
+				    </label>
+					<h:inputText 
+						style="width: 435px;"
+						value="#{categoriaController.categoria.nome}"
+						styleClass="form-control" 
+						id="nomeCategoria"/>
+				</div>
+  	            
+  	            <h:commandLink
+  	            	action="#{categoriaController.onClickBtConfirmar}" 
+  	            	onclick="return validateCategoria();"
+  	  	            styleClass="btn btn-danger btn-lg" 
+  	            	value="Confirmar" />
+          	            
+				<p:dataTable 
+					value="#{categoriaController.categorias}" 
+					style="margin-top:25px; width:50%"
+					selection="#{categoriaController.selectedCategoria}"
+					rowKey="#{categoria.id}"
+					selectionMode="single"
+					scrollHeight="195"
+					scrollable="true"
+					var="categoria">
+					<p:ajax event="rowSelect" listener="#{categoriaController.onRowSelect}" update=":form"/>
+		            <p:column headerText="Nome da Categoria">
+		                <h:outputText value="#{categoria.nome}" />
+		            </p:column>		
+				</p:dataTable>
+	        </div>
+	    </header>
+	
+	</h:form>
+	<ui:include src="../../footer.xhtml"/>
+</body> 
+</html>
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+
+
+		<script type="text/javascript">
+		/* <![CDATA[ */
+
+			jQuery('[id*=msgPanel]')
+			
+			jQuery(function() {
+			});
+
+			$(function() {
+			});
+			
+		
+		/*]]>*/
+		</script>
+
+		

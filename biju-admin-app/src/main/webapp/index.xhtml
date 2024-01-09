@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+  <h:head>
+	<ui:include src="header.xhtml"/>
+	
+	<script src="#{request.contextPath}/js/jquery-1.8.3.js"></script>
+	
+  </h:head>
+  
+  <body id="page-top">
+  	<f:loadBundle var="msg" basename="messages"/>
+  
+    <div id="root">
+  
+  		<style>
+  			button {
+			   margin-top: 15px !important;
+			   height: 60px;
+			   width: 285px;	  			
+  			}
+  		</style>
+    
+	    <header class="masthead bg-white text-black text-center">
+	        <div class="container d-flex align-items-center flex-column">
+	            <h1 class="masthead-heading text-uppercase mb-0">Biju Girls</h1>
+	            
+	            <p class="masthead-subheading font-weight-light mb-0" style="margin-top: 45px;">
+	                <h3>#{msg['msg.clique.botao']} </h3>
+	            </p>
+				<h:form>
+		            <p:commandButton 
+		            	onclick="document.location.href = '#{request.contextPath}/faces/home.xhtml'" 
+		            	value="Administrar a Loja da BijuGirls"
+		            	style="font-weight: bold;"
+		            	type="button" 
+		            	ajax="false"/>
+				</h:form>	            
+	            
+	        </div>
+	    </header>
+    
+    </div>
+    <script src="#{request.contextPath}/js/bootstrap.bundle.min.js"></script>
+    <script src="#{request.contextPath}/js/bootstrap-carousel.js"></script>
+    <script src="#{request.contextPath}/js/scripts.js"></script>
+  </body>
+
+</html>
+
+
+
+
+
+
+

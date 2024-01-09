@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+<h:head>
+	<ui:include src="../header.xhtml"/>
+</h:head>
+<body> 
+	<ui:include src="../nav.xhtml"/>
+	<h:form>
+  		<style>
+  			button {
+  			   font-weight: bold;	
+			   height: 60px;
+			   width: 285px;	  			
+  			}
+  		</style>
+		
+		<div class="container d-flex align-items-center flex-column" style="margin-top: 175px;">
+			<p:commandButton
+				action="#{categoriaController.executarCargaCategorias}"
+				value="Executar Carga de Categorias"
+				style="margin-top: 15px;"
+				ajax="false"/>
+		
+			<p:dataTable var="categoria" value="#{categoriaController.categorias}" style="margin-top:35px; width: 75%;">
+	            <p:column headerText="Nome da Categoria">
+	                <h:outputText value="#{categoria.nome}" />
+	            </p:column>		
+			</p:dataTable>
+		</div>			
+	
+	</h:form>
+	<ui:include src="../footer.xhtml"/>
+</body> 
+</html>
+
+
+
+
+
+
