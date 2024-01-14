@@ -12,6 +12,17 @@ public class CategoriaRepo implements Serializable {
 	
 		
 
+
+	public Categoria getById(Integer id) {
+		PersistenceServiceUtil persistence = new PersistenceServiceUtil();
+		
+		try {
+			return persistence.findObject(Categoria.class, id);
+			
+		} finally {
+			persistence.close();
+		} 
+	}
 	
 	public Categoria getById(Categoria categoria) {
 		PersistenceServiceUtil persistence = new PersistenceServiceUtil();

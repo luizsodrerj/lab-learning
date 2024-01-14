@@ -10,8 +10,11 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import biju.data.dto.CategoriaDTO;
+import biju.data.dto.StatusProdutoDTO;
 import biju.repo.CargaDadosRepo;
+import framework.persistence.jpa.PersistenceServiceUtil;
 import pdv.domain.Categoria;
+import pdv.domain.StatusProduto;
 
 public class CargaService implements Serializable {
 
@@ -20,6 +23,34 @@ public class CargaService implements Serializable {
 	private CargaDadosRepo cargaRepo = new CargaDadosRepo();
 	
 	
+	
+	public List<StatusProduto> cargaStatus() {
+		PersistenceServiceUtil persistence = new PersistenceServiceUtil();
+		try {
+			InputStream stream = getClass().getResourceAsStream("/status-produto.json");
+			String json 	   = new String(IOUtils.toByteArray(stream), "UTF-8");
+			
+			List<StatusProdutoDTO>statusList = new ObjectMapper().readValue(json, new TypeReference<List<StatusProdutoDTO>>(){});
+			
+			persistence.beginTransaction();
+			
+			for (StatusProdutoDTO statusTO: statusList) {
+				StatusProduto status = new StatusProduto();
+				status.setStatus(statusTO.getStatus());
+				
+				persistence.persist(status);
+			}
+			persistence.commit();
+			
+			return persistence.findAll(StatusProduto.class, null);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+			persistence.close();
+		} 
+	}
 	
 	public List<Categoria> cargaCategorias() {
 		try {
@@ -40,10 +71,10 @@ public class CargaService implements Serializable {
 	public static void main(String[] args) {
 		CargaService carga = new CargaService();
 		
-		List<Categoria>list = carga.cargaCategorias();
+		List<StatusProduto>list = carga.cargaStatus();
 		
-		for (Categoria categoria : list) {
-			System.out.println(categoria.getNome()); 
+		for (StatusProduto status: list) {
+			System.out.println(status.getStatus()); 
 		}
 	}
 }

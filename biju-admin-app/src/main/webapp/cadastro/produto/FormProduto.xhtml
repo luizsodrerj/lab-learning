@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+<h:head>
+	<ui:include src="../../header.xhtml"/>
+</h:head>
+<body id="page-top"> 
+  <ui:include src="../../nav.xhtml"/>
+  
+  <script type="text/javascript" src="#{request.contextPath}/js/jquery.maskMoney.min.js"></script>
+  <script type="text/javascript">
+  /* <![CDATA[ */
+	jQuery(function() {
+		jQuery('[id*=preco]').maskMoney({
+			thousands:'.', 
+			decimal:','
+		})
+	});
+  /*]]>*/
+  </script>
+  
+  <div id="root">
+  <h:form id="form" enctype="multipart/form-data">
+	
+	<f:loadBundle var="msg" basename="messages"/>
+	
+	<section class="page-section">
+	    <div class="container">
+	        <div class="text-center" style="margin-top: 30px;">
+	            <h3 class="section-heading">#{msg['cad.pecas']}</h3>
+	        </div>
+	        <div class="text-left" style="margin-top: 35px;">
+	            <div class="row">
+					<div class="mb-3">
+					    <label for="nomePeca" class="form-label">
+					    	Nome da #{msg['peca']}
+					    </label>
+						<h:inputText
+							value="#{produtoController.produto.nome}" 
+							styleClass="form-control" 
+							style="width: 535px;"
+							id="nomePeca"/>
+					</div>
+					<div class="mb-3">
+					    <label for="descricao" class="form-label">#{msg['descricao']}</label>
+						<h:inputTextarea
+							value="#{produtoController.produto.descricao}" 
+							style="width: 453px; height: 71px;"
+							styleClass="form-control" 
+							id="descricao"/>
+					</div>
+					<div class="mb-3">
+					    <label for="preco" class="form-label">#{msg['preco']}</label>
+						<h:inputText 
+							value="#{produtoController.preco}"
+							styleClass="form-control" 
+							style="width: 165px;"
+							id="preco"/>
+					</div>
+					<div class="mb-3">
+					    <label for="qtd" class="form-label">
+					    	Quantidade em Estoque
+					    </label>
+						<h:inputText
+							value="#{produtoController.produto.qtdEstoque}" 
+							styleClass="form-control"
+							style="width: 115px;"
+							id="qtd">
+							<f:convertNumber type="number"/>
+						</h:inputText>	
+					</div>
+					<div class="mb-3">
+						<label for="imagem" class="form-label">
+					    	Imagem ou Foto da #{msg['peca']}
+					    </label>
+					    <br/>
+						<p:fileUpload 
+							value="#{produtoController.image}"
+							label="Procurar Imagem"
+							skinSimple="true" 
+							update="form"
+							process="@this"
+							mode="simple"
+							auto="true"
+							id="imagem"/>
+						<br/><br/>
+						
+						<p:graphicImage
+							rendered="#{not empty produtoController.image}"
+							value="#{produtoController.imageStream}"
+							style="width: 308px;"
+							cache="false"
+							id="imgStream"/>	
+					</div>
+					<div class="field col-12 md:col-4">
+					    <p:outputLabel for="@next" value="Categoria"/>
+					    <br/>
+						<p:selectOneMenu 
+							value="#{produtoController.selectedCategoriaId}"
+							style="margin-top: 5px;" 
+							id="categoria">
+		                    <f:selectItem itemLabel="Selecione uma Categoria" itemValue=""/>
+		                    <f:selectItems value="#{produtoController.categorias}"/>
+		                </p:selectOneMenu>						
+					</div>
+					<div class="field col-12 md:col-4" style="margin-top:22px;">
+					    <p:outputLabel for="@next" value="Status do Produto"/>
+					    <br/>
+						<p:selectOneMenu 
+							value="#{produtoController.selectedStatusId}"
+							style="margin-top: 5px;" 
+							id="status">
+		                    <f:selectItem itemLabel="Selecione um Status" itemValue=""/>
+		                    <f:selectItems value="#{produtoController.status}"/>
+		                </p:selectOneMenu>						
+					</div>
+	  	            <div class="mb-3" style="margin-top: 22px;">
+		  	            <h:commandLink
+		  	            	onclick="return false;"
+		  	  	            styleClass="btn btn-danger btn-lg" 
+		  	            	value="Confirmar" />
+					</div>
+	            </div>
+	        </div>
+	    </div>
+	</section>
+  </h:form>
+  </div>
+  <ui:include src="../../footer.xhtml"/>
+</body> 
+</html>
