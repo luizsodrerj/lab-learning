@@ -1,13 +1,3 @@
-
-
-
-@Component("") 
-@Scope("session") 
-
-
-git commit -m "Implementação da app admin Biju"
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -15,11 +5,13 @@ git commit -m "Implementação da app admin Biju"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"> 
 <h:head>
-	<ui:include src="../../header.xhtml"/>
+	<ui:include src="../header.xhtml"/>
 </h:head>
 <body id="page-top"> 
-  <ui:include src="../../nav.xhtml"/>
+  <ui:include src="../nav.xhtml"/>
   
+  <link href="#{request.contextPath}/styles/produtos-layout.css" rel="stylesheet" type="text/css"/>
+
   <div id="root">
   <h:form id="form">
   
@@ -27,35 +19,21 @@ git commit -m "Implementação da app admin Biju"
 	
 	<section class="page-section">
 	    <div class="container">
-	    
+	        <div class="text-center" style="margin-top: 30px;">
+	            <h3 class="section-heading">#{msg['list.pecas']}</h3>
+	        </div>
+	    	<div id="resultPanel">
+	    		<ui:include src="produtos.xhtml">
+	    			<ui:param 
+	    				value="#{pecasListController.produtos}"
+	    				name="productList"/>
+	    		</ui:include>
+	    	</div>
 	    </div>
 	</section>
 	
   </h:form>
   </div>
-  <ui:include src="../../footer.xhtml"/>
+  <ui:include src="../footer.xhtml"/>
 </body> 
 </html>
-
-
-
-		<script type="text/javascript">
-		/* <![CDATA[ */
-
-			jQuery('[id*=msgPanel]')
-			
-			jQuery(function() {
-			});
-
-			$(function() {
-			});
-			
-		
-		/*]]>*/
-		</script>
-
-
- implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-		

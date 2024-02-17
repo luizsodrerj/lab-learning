@@ -12,8 +12,12 @@ import javax.persistence.*;
 @Table(name="STATUS_PRODUTO")
 @NamedQuery(name="StatusProduto.findAll", query="SELECT s FROM StatusProduto s")
 public class StatusProduto implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
+	public static final Integer DISPONIVEL  = 1;
+	public static final Integer ESGOTADO 	= 2;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
@@ -21,6 +25,12 @@ public class StatusProduto implements Serializable {
 	private String status;
 
 	
+	public StatusProduto(Integer id, String status) {
+		super();
+		this.status = status;
+		this.id = id;
+	}
+
 	public StatusProduto() {
 	}
 

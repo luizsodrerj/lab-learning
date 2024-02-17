@@ -1,0 +1,81 @@
+<ui:component 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+    <h:head></h:head>
+    
+	<p:dataView 
+        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        rowsPerPageTemplate="6,12,16"
+        gridIcon="pi pi-th-large"
+        value="#{productList}" 
+        var="produto" 
+        paginator="true"
+        layout="grid"
+		rows="12">
+    	<p:dataViewGridItem>
+			<div class="product-grid-item card border-1">
+               <div class="product-grid-item-top">
+                   <div>
+                       <i class="pi pi-tag product-category-icon"/>
+                       <span class="product-category">
+                       	#{produto.categoria.nome}
+                       </span>
+                   </div>
+                   <h:panelGroup rendered="#{produto.disponivel}">
+	                   <span class="product-badge status-instock">
+	                   		#{produto.statusProduto.status}
+	                   </span>
+                   </h:panelGroup>
+                   <h:panelGroup rendered="#{not produto.disponivel}">
+	                   <span class="product-badge status-outofstock">
+	                   		<h:outputText value="#{not empty produto.statusProduto ? produto.statusProduto.status : 'Indisponivel'}" />
+	                   </span>
+                   </h:panelGroup>
+               </div>
+               <div class="product-grid-item-content" style="text-align: center;">
+                   <h:graphicImage 
+                   	  url="/imagegen?prodId=#{produto.id}" 
+                   	  style="width:220px; height:220px;"/>
+   				                	
+                   <div class="product-name">
+                   		#{produto.nome}
+                   </div>
+                   <div class="product-description">
+                   		#{produto.descricao}
+                   	</div>
+               </div>
+               <div class="product-grid-item-bottom">
+                   <h:outputText value="#{produto.preco}" styleClass="product-price">
+                       <f:convertNumber
+	               	   	  minFractionDigits="2"
+		               	  maxFractionDigits="2"
+                       	  currencySymbol="R$"
+                       	  type="currency" 
+		               	  locale="pt_BR"/>
+                   </h:outputText>
+                   <p:commandButton 
+                   	  onclick="jQuery('#idProduto').val('#{produto.id}'); jQuery('[id*=btShowDetail]').click(); return false;"	
+                      icon="pi pi-shopping-cart"
+                      value="Ver Detalhes"
+                      type="button"/>
+               </div>
+    		</div>
+        </p:dataViewGridItem>
+	</p:dataView>	    
+
+	<input type="hidden" id="idProduto" name="idProduto" /> 	
+	
+    <p:commandButton 
+    	action="#{detalheProdutoController.onClickBtVerDetalhes}"
+    	style="visibility: hidden"
+    	id="btShowDetail"
+        ajax="false"/>   
+    
+    
+</ui:component>    
+
+
+
+

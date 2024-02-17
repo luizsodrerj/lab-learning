@@ -52,7 +52,7 @@
 				    	Nome da #{msg['peca']}
 				    </label>
 					<p:inputText
-						value="#{produtoController.produto.nome}" 
+						value="#{detalheProdutoController.produto.nome}" 
 						styleClass="form-control" 
 						style="width: 535px;"
 						id="nomePeca"/>
@@ -60,7 +60,7 @@
 				<div class="mb-3">
 				    <label for="descricao" class="form-label">#{msg['descricao']}</label>
 					<p:inputTextarea
-						value="#{produtoController.produto.descricao}" 
+						value="#{detalheProdutoController.produto.descricao}" 
 						style="width:453px; height:71px;"
 						styleClass="form-control"
 						maxlength="100" 
@@ -69,7 +69,7 @@
 				<div class="mb-3">
 				    <label for="preco" class="form-label">#{msg['preco']}</label>
 					<p:inputText 
-						value="#{produtoController.preco}"
+						value="#{detalheProdutoController.preco}"
 						styleClass="form-control" 
 						style="width: 165px;"
 						id="preco"/>
@@ -79,7 +79,7 @@
 				    	Quantidade em Estoque
 				    </label>
 					<p:inputText
-						value="#{produtoController.produto.qtdEstoque}" 
+						value="#{detalheProdutoController.produto.qtdEstoque}" 
 						styleClass="form-control"
 						style="width: 115px;"
 						id="qtd">
@@ -92,10 +92,10 @@
 				    </label>
 				    <br/>
 					<p:fileUpload 
-						value="#{produtoController.image}"
+						value="#{detalheProdutoController.image}"
 						label="Procurar Imagem"
 						oncomplete="initialize()"
-						listener="#{produtoController.handleFileUpload}"
+						listener="#{detalheProdutoController.handleFileUpload}"
 						skinSimple="true" 
 						update="preview"
 						process="@this"
@@ -105,8 +105,8 @@
 					<br/><br/>
 					<h:panelGroup id="preview">
 						<p:graphicImage
-							rendered="#{not empty produtoController.image}"
-							value="#{produtoController.imageStream}"
+							rendered="#{not empty detalheProdutoController.image}"
+							value="#{detalheProdutoController.imageStream}"
 							style="width: 308px;"
 							cache="false"
 							id="imgStream"/>	
@@ -116,27 +116,27 @@
 				    <p:outputLabel for="@next" value="Categoria"/>
 				    <br/>
 					<p:selectOneMenu 
-						value="#{produtoController.selectedCategoriaId}"
+						value="#{detalheProdutoController.selectedCategoriaId}"
 						style="margin-top: 5px;" 
 						id="categoria">
 	                    <f:selectItem itemLabel="Selecione uma Categoria" itemValue=""/>
-	                    <f:selectItems value="#{produtoController.categorias}"/>
+	                    <f:selectItems value="#{detalheProdutoController.categorias}"/>
 	                </p:selectOneMenu>						
 				</div>
 				<div class="field col-12 md:col-4" style="margin-top:22px;">
 				    <p:outputLabel for="@next" value="Status do Produto"/>
 				    <br/>
 					<p:selectOneMenu 
-						value="#{produtoController.selectedStatusId}"
+						value="#{detalheProdutoController.selectedStatusId}"
 						style="margin-top: 5px;" 
 						id="status">
 	                    <f:selectItem itemLabel="Selecione um Status" itemValue=""/>
-	                    <f:selectItems value="#{produtoController.status}"/>
+	                    <f:selectItems value="#{detalheProdutoController.status}"/>
 	                </p:selectOneMenu>						
 				</div>
   	            <div class="mb-3" style="margin-top: 22px;">
 	  	            <h:commandLink
-	  	            	action="#{produtoController.onClickBtConfirmar}"
+	  	            	action="#{detalheProdutoController.onClickBtConfirmar}"
 	  	  	            styleClass="btn btn-danger btn-lg" 
 	  	            	onclick="return validateForm();"
 	  	            	value="Confirmar" />
