@@ -10,6 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
+import org.primefaces.model.StreamedContent;
+
+import biju.util.IOUtil;
 
 @Entity
 public class Produto implements Serializable {
@@ -38,11 +43,45 @@ public class Produto implements Serializable {
 	@ManyToOne
     @JoinColumn(name = "ID_CATEGORIA")
 	private Categoria categoria;
+	
 
 	
-	
+	public Produto(
+		     String descricao, 
+		     String nome, 
+		     Double preco, 
+		     Integer qtdEstoque, 
+		     byte[] imagem,
+		     StatusProduto statusProduto, 
+		     Categoria categoria
+		   ) {
+		super();
+		this.statusProduto = statusProduto;
+		this.categoria = categoria;
+		this.descricao = descricao;
+		this.qtdEstoque = qtdEstoque;
+		this.imagem = imagem;
+		this.nome = nome;
+		this.preco = preco;
+	}
+
 	public Produto() {
 	}
+
+	public boolean isDisponivel() {
+		return	statusProduto != null && statusProduto.getId() != null ?
+				statusProduto.getId().equals(StatusProduto.DISPONIVEL) :
+				qtdEstoque != null && qtdEstoque.intValue() > 0;	
+	}
+	
+	@Transient
+	public StreamedContent getImageStream() {
+		StreamedContent s = IOUtil.imageBytesToStreamedContent(
+					imagem, 
+					IOUtil.IMAGE_PNG
+				);
+		return s; 
+    }
 
 	public StatusProduto getStatusProduto() {
 		return statusProduto;

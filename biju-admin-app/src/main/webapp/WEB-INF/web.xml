@@ -10,6 +10,13 @@
 		<param-name>primefaces.UPLOADER</param-name>
 		<param-value>commons</param-value>
 	</context-param>
+	<!-- 
+	-->
+	<listener>
+	    <listener-class>
+	        org.springframework.web.context.ContextLoaderListener
+	    </listener-class>
+	</listener>
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -18,6 +25,14 @@
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/faces/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ImgGenServlet</servlet-name>
+		<servlet-class>biju.util.ImageGeneratorServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ImgGenServlet</servlet-name>
+		<url-pattern>/imagegen</url-pattern>
 	</servlet-mapping>
 	<filter>
 		<filter-name>FileUploadFilter</filter-name>

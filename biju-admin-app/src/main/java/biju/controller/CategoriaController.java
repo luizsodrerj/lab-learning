@@ -4,17 +4,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
 import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-import biju.repo.CategoriaRepo;
+import biju.repo.CategoriaJPARepository;
 import biju.service.CargaService;
+import biju.service.CategoriaService;
 import pdv.domain.Categoria;
 
-@ManagedBean(name = "categoriaController")
-@SessionScoped
+//@ManagedBean(name = "categoriaController")
+//@SessionScoped
+@Component("categoriaController") 
+@Scope("session") 
 public class CategoriaController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -23,18 +26,25 @@ public class CategoriaController implements Serializable {
 	
 	private CargaService cargaService = new CargaService();
 	
-	private CategoriaRepo categoriaRepo = new CategoriaRepo();
-	
 	private List<Categoria>categorias = new ArrayList<>();
 	private Categoria categoria 	  = new Categoria();
 	private Categoria selectedCategoria;
 	
+	@Autowired
+	private CategoriaJPARepository categoriaJPARepository;
 
+	@Autowired
+	private CategoriaService categoriaService;
+	
 	
 	public String onClickBtConfirmar() {
-		categoria.setId(null);
-		
-		categoriaRepo.persist(categoria);
+		if (selectedCategoria != null) {
+			categoria.setId(selectedCategoria.getId());
+			categoriaService.update(categoria);
+		} else {
+			categoria.setId(null);
+			categoriaJPARepository.save(categoria);
+		}
 		
 		return getCategoriasList();
 	}
@@ -52,7 +62,7 @@ public class CategoriaController implements Serializable {
 	}
 	
 	public String getCategoriasList() {
-		categorias 		  = categoriaRepo.findAllCategorias();
+		categorias 		  = categoriaJPARepository.findAllByOrderByNomeAsc();
 		selectedCategoria = null;
 		categoria  		  = new Categoria();
 		

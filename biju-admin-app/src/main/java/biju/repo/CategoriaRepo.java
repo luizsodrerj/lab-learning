@@ -9,7 +9,6 @@ import pdv.domain.Categoria;
 public class CategoriaRepo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
 		
 
 

@@ -14,22 +14,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import biju.faces.UploadedFileImpl;
 import biju.repo.CategoriaRepo;
+import biju.repo.ProdutoJPARepository;
 import biju.repo.StatusRepo;
 import biju.service.ProdutoService;
+import biju.util.FacesUtil;
 import biju.util.IOUtil;
+import framework.util.FormatNumberUtil;
 import framework.util.NumberUtil;
 import pdv.domain.Categoria;
 import pdv.domain.Produto;
 import pdv.domain.StatusProduto;
 
-@Component("produtoController") 
+@Component("detalheProdutoController") 
 @Scope("session") 
-public class ProdutoController implements Serializable {
+public class DetalheProdutoController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final String PRODUTO_VIEW 	= "/cadastro/produto/FormProduto.xhtml";
+	private static final String PRODUTO_VIEW 	= "/cadastro/produto/FormDetalheProduto.xhtml";
 	private static final String LIST_PROD_VIEW 	= "/produtos/ListProdutos.xhtml";
 	
 	private CategoriaRepo categoriaRepo = new CategoriaRepo();
@@ -42,8 +46,11 @@ public class ProdutoController implements Serializable {
 	private String preco;
 	
 	@Autowired
+	private ProdutoJPARepository produtoJPARepository;
+
+	@Autowired
 	private ProdutoService produtoService;
-	
+
 	
 
 	public String onClickBtConfirmar() {
@@ -63,9 +70,24 @@ public class ProdutoController implements Serializable {
 			produto.getStatusProduto().setId(StatusProduto.ESGOTADO);
 		}
 		
-		produtoService.persistProduto(produto);
+		produtoService.updateProduto(produto);
 		
 		return LIST_PROD_VIEW;
+	}
+
+	public String onClickBtVerDetalhes() {
+		Integer id  = Integer.valueOf(FacesUtil.getRequest().getParameter("idProduto"));
+		produto		= produtoJPARepository.findOne(id);
+		preco		= FormatNumberUtil.format(produto.getPreco(), FormatNumberUtil.DUAS_CASAS_DECIMAIS) ;
+		imageBytes 	= produto.getImagem();
+		image 		= imageBytes != null ?
+					  new UploadedFileImpl(imageBytes) :
+					  null;	  
+		
+		populateCategorias();
+		populateStatus();
+		
+		return PRODUTO_VIEW;
 	}
 
 	public void handleFileUpload(FileUploadEvent event) {
@@ -74,22 +96,12 @@ public class ProdutoController implements Serializable {
 		}
     }
 	
-	public String redirectToForm() {
-		produto 	= new Produto();
-		imageBytes 	= null;
-		preco		= null;
-		image 		= null;
-
-		produto.setCategoria(new Categoria());
-		produto.setStatusProduto(new StatusProduto());
-
-		populateCategorias();
-		populateStatus();
-		
-		return PRODUTO_VIEW;
-	}
-
 	private void populateCategorias() {
+		Categoria cat = produto.getCategoria() != null ?
+						produto.getCategoria() :
+						new Categoria();	
+		produto.setCategoria(cat);
+		
 		categorias.clear();
 			
 		List<Categoria>list = categoriaRepo.findAllCategorias();
@@ -105,6 +117,11 @@ public class ProdutoController implements Serializable {
 	}
 
 	private void populateStatus() {
+		StatusProduto statusProd = 	produto.getStatusProduto() != null ?
+								  	produto.getStatusProduto() :
+								  	new StatusProduto();	  
+		produto.setStatusProduto(statusProd);
+		
 		this.status.clear();
 		
 		StatusRepo repo = new StatusRepo();

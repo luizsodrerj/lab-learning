@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"> 
+<h:head>
+	<ui:include src="../header.xhtml"/>
+</h:head>
+<body id="page-top"> 
+  <ui:include src="../nav.xhtml"/>
+  
+    <link href="#{request.contextPath}/styles/produtos-layout.css?id=#{request.session.id}" rel="stylesheet" type="text/css"/>
+    
+	<script src="#{request.contextPath}/produtos/ParamsPesquisa.js?id=#{request.session.id}" type="text/javascript"></script>
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	
+		var statFiltPnl = '#{pesqPecasController.statusFilterPanel}'
+		var statResPnl  = '#{pesqPecasController.statusResultPanel}'	 
+
+		jQuery(function() {
+			init(statFiltPnl,statResPnl)
+		});
+	
+	/*]]>*/
+	</script>
+  <div id="root">
+  <h:form id="form">
+  
+	<f:loadBundle var="msg" basename="messages"/>
+	
+	<section class="page-section">
+	    <div class="container">
+	        <div class="text-center" style="margin-top: 30px;">
+	            <h3 class="section-heading">#{msg['pesq.pecas']}</h3>
+	        </div>
+			<div class="form-check">
+			  <input 
+			  	 onclick="onClickBtShowFiltPanel();" 
+			  	 class="form-check-input"
+			  	 type="checkbox" 
+			  	 id="checkFilt" 
+			  	 value=""/>
+			  <label class="form-check-label" for="checkFilt">
+			    Exibir Painel de Filtro de Pesquisa
+			  </label>
+			</div>
+			<div class="form-check">
+			  <input
+			  	 onclick="onClickBtShowResultPanel();" 
+			  	 class="form-check-input" 
+			  	 type="checkbox" 
+			  	 id="checkResult"
+			  	 value=""/>
+			  <label class="form-check-label" for="checkResult">
+			    Exibir Painel de Resultado da Pesquisa
+			  </label>
+			</div>				
+	        <div class="text-left" id="filterPanel" style="margin-top:17px; visibility:visible;">
+	            <div class="row">
+					<div class="mb-3">
+					    <label for="nomePeca" class="form-label">
+					    	Nome da #{msg['peca']}
+					    </label>
+						<h:inputText
+							value="#{pesqPecasController.produto.nome}" 
+							styleClass="form-control" 
+							style="width: 535px;"
+							id="nomePeca"/>
+					</div>
+					<div class="mb-3">
+					    <label for="descricao" class="form-label">#{msg['descricao']}</label>
+						<h:inputTextarea
+							value="#{pesqPecasController.produto.descricao}" 
+							style="width: 453px; height: 71px;"
+							styleClass="form-control" 
+							id="descricao"/>
+					</div>
+					<div class="field col-12 md:col-4">
+					    <p:outputLabel for="@next" value="Categoria"/>
+					    <br/>
+						<p:selectOneMenu 
+							value="#{pesqPecasController.selectedCategoriaId}"
+							style="margin-top: 5px;" 
+							id="categoria">
+		                    <f:selectItem itemLabel="Selecione uma Categoria" itemValue=""/>
+		                    <f:selectItems value="#{pesqPecasController.categorias}"/>
+		                </p:selectOneMenu>						
+					</div>
+					<div class="field col-12 md:col-4" style="margin-top:22px;">
+					    <p:outputLabel for="@next" value="Status do Produto"/>
+					    <br/>
+						<p:selectOneMenu 
+							value="#{pesqPecasController.selectedStatusId}"
+							style="margin-top: 5px;" 
+							id="status">
+		                    <f:selectItem itemLabel="Selecione um Status" itemValue=""/>
+		                    <f:selectItems value="#{pesqPecasController.status}"/>
+		                </p:selectOneMenu>						
+					</div>
+	  	            <div class="mb-3" style="margin-top: 22px;">
+		  	            <h:commandLink
+		  	            	action="#{pesqPecasController.onClickBtPesquisar}"
+		  	  	            styleClass="btn btn-danger btn-lg" 
+		  	            	value="Pesquisar" />
+					</div>
+	            </div>
+	    	</div>
+	    	<div id="resultPanel" style="visibility:hidden;">
+	    		<ui:include src="produtos.xhtml">
+	    			<ui:param 
+	    				value="#{pesqPecasController.produtos}"
+	    				name="productList"/>
+	    		</ui:include>
+	    	</div>
+	    </div>
+	</section>
+	
+  </h:form>
+  </div>
+  <ui:include src="../footer.xhtml"/>
+</body> 
+</html>
